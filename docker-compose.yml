@@ -1,0 +1,184 @@
+services:
+
+  # ─── PostgreSQL: auth_db ───────────────────────────────────────────────────
+
+  postgres-auth:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: auth_db
+      REPL_PASSWORD: ${REPL_PASSWORD}
+    command:
+      - postgres
+      - -c
+      - wal_level=replica
+      - -c
+      - max_wal_senders=5
+      - -c
+      - wal_keep_size=256
+    volumes:
+      - postgres_auth_data:/var/lib/postgresql/data
+      - ./postgres/primary-init.sh:/docker-entrypoint-initdb.d/init.sh
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -h 127.0.0.1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  postgres-auth-replica:
+    build:
+      context: ./postgres
+      dockerfile: replica.Dockerfile
+    environment:
+      PGDATA: /var/lib/postgresql/data
+      MASTER_HOST: postgres-auth
+      REPL_PASSWORD: ${REPL_PASSWORD}
+    volumes:
+      - postgres_auth_replica_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -h 127.0.0.1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  # ─── PostgreSQL: contenido_db ──────────────────────────────────────────────
+
+  postgres-contenido:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: contenido_db
+      REPL_PASSWORD: ${REPL_PASSWORD}
+    command:
+      - postgres
+      - -c
+      - wal_level=replica
+      - -c
+      - max_wal_senders=5
+      - -c
+      - wal_keep_size=256
+    volumes:
+      - postgres_contenido_data:/var/lib/postgresql/data
+      - ./postgres/primary-init.sh:/docker-entrypoint-initdb.d/init.sh
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -h 127.0.0.1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  postgres-contenido-replica:
+    build:
+      context: ./postgres
+      dockerfile: replica.Dockerfile
+    environment:
+      PGDATA: /var/lib/postgresql/data
+      MASTER_HOST: postgres-contenido
+      REPL_PASSWORD: ${REPL_PASSWORD}
+    volumes:
+      - postgres_contenido_replica_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    depends_on:
+      postgres-contenido:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -h 127.0.0.1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  # ─── SQL Server ────────────────────────────────────────────────────────────
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${SA_PASSWORD}
+      MSSQL_PID: Express
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$SA_PASSWORD\" -Q 'SELECT 1' -b -No 2>/dev/null || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 45s
+
+  # ─── APIs ──────────────────────────────────────────────────────────────────
+
+  auth-api:
+    build: ./auth-api
+    environment:
+      DATABASE_URL: "postgresql://postgres:${POSTGRES_PASSWORD}@postgres-auth:5432/auth_db?schema=public"
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ACCESS_EXPIRATION: 15m
+      JWT_REFRESH_EXPIRATION: 7d
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  contenido-api:
+    build: ./contenido-api
+    environment:
+      DATABASE_URL: "postgresql://postgres:${POSTGRES_PASSWORD}@postgres-contenido:5432/contenido_db?schema=public"
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ACCESS_EXPIRATION: 15m
+      JWT_REFRESH_EXPIRATION: 7d
+      API_URL: "http://localhost:3000"
+    ports:
+      - "3000:3000"
+    volumes:
+      - uploads_data:/app/uploads
+    restart: unless-stopped
+    depends_on:
+      postgres-contenido:
+        condition: service_healthy
+
+  api-net:
+    build: ./api-net/citas-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: "http://+:5233"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=citas_db;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;"
+      Jwt__Secret: ${JWT_SECRET}
+    ports:
+      - "5233:5233"
+    restart: unless-stopped
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+  # ─── Frontend ──────────────────────────────────────────────────────────────
+
+  santino-web:
+    build: ./santino-web
+    ports:
+      - "4200:4200"
+    restart: unless-stopped
+    depends_on:
+      - auth-api
+      - contenido-api
+      - api-net
+
+# ─── Volúmenes persistentes ────────────────────────────────────────────────
+
+volumes:
+  postgres_auth_data:
+  postgres_auth_replica_data:
+  postgres_contenido_data:
+  postgres_contenido_replica_data:
+  sqlserver_data:
+  uploads_data:
