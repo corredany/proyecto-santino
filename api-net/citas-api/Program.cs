@@ -55,7 +55,9 @@ builder.Services.AddScoped<CrearClienteUseCase>();
 // JWT
 // .NET 9 / Microsoft.IdentityModel 7.x exige >256 bits para HS256, pero el secreto tiene 168 bits.
 // Se usa SignatureValidator personalizado con HMACSHA256 nativo para omitir esa restricción.
-var jwtSecret = builder.Configuration["Jwt:Secret"] ?? throw new ArgumentNullException("JWT Secret no configurado");
+var jwtSecret = builder.Configuration["Jwt:Secret"];
+if (string.IsNullOrWhiteSpace(jwtSecret))
+    throw new InvalidOperationException("JWT Secret no configurado. Define la variable de entorno Jwt__Secret.");
 var jwtKeyBytes = Encoding.UTF8.GetBytes(jwtSecret);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -86,10 +88,26 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
+// Aplicar migraciones pendientes al arrancar
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+// Security headers
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+    context.Response.Headers.Append("X-Frame-Options", "DENY");
+    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+    await next();
+});
 
 app.UseCors("Angular");
 app.UseAuthentication();
