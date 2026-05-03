@@ -1,0 +1,103 @@
+<main class="contact-form-container">
+    <div class="contact-form-container-title">
+        <img src="img/santino.png" alt="Logo de Santino" class="logo">
+        <h1>Contacto</h1>
+        <p>Agenda tu cotización llenando el formulario</p>
+    </div>
+    
+    <form class="contact-form">
+        <!-- Información Personal -->
+        <section class="form-section">
+            <h2>Información Personal</h2>
+            <div class="form-group">
+                <label for="nombre">Nombre completo *</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">Teléfono de contacto *</label>
+                <input type="tel" id="telefono" name="telefono" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Correo electrónico *</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+        </section>
+
+        <!-- Tipo de Proyecto -->
+        <section class="form-section">
+            <h2>Tipo de Proyecto *</h2>
+            
+            <!-- Ejemplo de radio buttons -->
+            <div class="form-group">
+                <label class="radio-option"><input type="radio" name="tipoProyecto" value="cocina" (change)="onTipoProyectoChange($event)">
+                    Cocina</label>
+                <label class="radio-option"><input type="radio" name="tipoProyecto" value="closet" (change)="onTipoProyectoChange($event)">
+                    Clóset</label>
+                <label class="radio-option"><input type="radio" name="tipoProyecto" value="closet" (change)="onTipoProyectoChange($event)">
+                    Vestidores</label>
+                <label class="radio-option"><input type="radio" name="tipoProyecto" value="closet" (change)="onTipoProyectoChange($event)">
+                    Muebles de baño</label>
+                <label class="radio-option"><input type="radio" name="tipoProyecto" value="closet" (change)="onTipoProyectoChange($event)">
+                    Diseño de interiores</label>
+                <label class="radio-option"><input type="radio" name="tipoProyecto" value="otro" (change)="onTipoProyectoChange($event)">
+                    Otro</label>
+            </div>
+
+            <!-- Campo condicional -->
+            <div class="form-group" *ngIf="showOtroInput">
+                <input type="text" id="otroProyectoInput" name="otroProyecto"
+                    placeholder="Ej. Alambrín, tapicería, etc.">
+            </div>
+        </section>
+
+        <!-- Domicilio -->
+        <section class="form-section">
+            <h2>Domicilio</h2>
+            <div class="form-group">
+                <label for="calle">Calle *</label>
+                <input type="text" id="calle" name="calle" required>
+            </div>
+
+            <div class="form-group">
+                <label for="numero">Número *</label>
+                <input type="text" id="numero" name="numero" required>
+            </div>
+
+            <div class="form-group">
+                <label for="codigoPostal">Código Postal *</label>
+                <input type="text" id="codigoPostal" name="codigoPostal" required>
+            </div>
+
+            <div class="form-group">
+                <label for="colonia">Colonia o Fraccionamiento *</label>
+                <input type="text" id="colonia" name="colonia" required>
+            </div>
+        </section>
+
+        <!-- Detalles de la Cita -->
+        <section class="form-section">
+            <h2>Detalles de la Cita</h2>
+            <div class="form-group">
+                <label for="fecha">Fecha y hora Preferida *</label>
+                <p-datepicker inputId="calendar-24h" [(ngModel)]="datetime24h" [showTime]="true" [hourFormat]="'24'"
+                    [showIcon]="true" [showOnFocus]="false" />
+            </div>
+        </section>
+
+        <!-- Comentarios -->
+        <section class="form-section">
+            <h2>Comentarios o Requerimientos Específicos</h2>
+            <div class="form-group">
+                <textarea id="comentarios" name="comentarios" rows="4"
+                    placeholder="Ej. 'Cocina estilo moderno, espacio reducido', 'Closet para recámara principal', etc."></textarea>
+            </div>
+        </section>
+
+        <button type="submit" class="submit-button">Enviar Solicitud</button>
+    </form>
+    <div class="contact-form-container-final">
+        <p>Nuestro equipo se contactara con usted para agendar la fecha y hora definitiva</p>
+    </div>
+</main>

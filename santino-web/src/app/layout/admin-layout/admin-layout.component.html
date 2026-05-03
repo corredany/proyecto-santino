@@ -1,0 +1,29 @@
+<div class="admin-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span>Panel Admin</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      @for (item of navItems; track item.ruta) {
+        <a [routerLink]="item.ruta" routerLinkActive="active">
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+
+    @if (usuario) {
+      <div class="sidebar-user">
+        <span class="sidebar-user-name">{{ usuario.nombre }}</span>
+        <span class="sidebar-user-email">{{ usuario.email }}</span>
+        <span class="sidebar-user-rol">{{ usuario.rolNombre }}</span>
+      </div>
+    }
+
+    <button class="sidebar-logout" (click)="logout()">Cerrar sesión</button>
+  </aside>
+
+  <div class="admin-content">
+    <router-outlet />
+  </div>
+</div>

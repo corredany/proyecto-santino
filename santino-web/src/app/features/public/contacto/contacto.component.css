@@ -1,0 +1,237 @@
+﻿/* ───────────────────────────────────────────────
+   Contacto — sistema de espaciado y tipografía
+─────────────────────────────────────────────── */
+:host {
+  display: block;
+  font-family: var(--font-body);
+}
+
+/* ══════════════════════════════
+   CONTENEDOR PRINCIPAL
+══════════════════════════════ */
+.contact-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  /* padding-top compensa el header fixed (~84 px) + respiro visual */
+  padding: clamp(6rem, 12vw, 9rem) clamp(1.5rem, 5vw, 3rem) clamp(4rem, 8vw, 6rem);
+}
+
+/* ══════════════════════════════
+   ENCABEZADO
+══════════════════════════════ */
+.contact-form-container-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  background: #1B1710;
+  padding: clamp(2rem, 4vw, 3rem);
+  border-radius: 12px;
+}
+
+.contact-form-container-title .logo {
+  width: clamp(100px, 20vw, 160px);
+  height: auto;
+  margin-bottom: 0.25rem;
+}
+
+.contact-form-container-title h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  color: #F2EEDD;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.gold-divider {
+  width: 60px;
+  height: 2px;
+  background: #EDDC94;
+  border: none;
+  margin: 0;
+}
+
+.contact-form-container-title p {
+  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+  color: #a89880;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ══════════════════════════════
+   FORMULARIO
+══════════════════════════════ */
+.contact-form {
+  background-color: #F2EEDD;
+  padding: clamp(2rem, 5vw, 3rem);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(27, 23, 16, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-section h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+  color: #1B1710;
+  margin: 0 0 0.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #EDDC94;
+}
+
+/* ── Campos ── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1B1710;
+}
+
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group input[type="email"],
+.form-group input[type="date"],
+.form-group input[type="time"],
+.form-group textarea {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid #c9b97a;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #1B1710;
+  background-color: #fff;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #EDDC94;
+  box-shadow: 0 0 0 3px rgba(237, 220, 148, 0.25);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* ── Opciones radio ── */
+.radio-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #1B1710;
+}
+
+.radio-option input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #EDDC94;
+  flex-shrink: 0;
+}
+
+/* ── Botón ── */
+.submit-button {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  margin: 0.5rem auto 0;
+  padding: 0.8rem 1.5rem;
+  background-color: #1B1710;
+  color: #F2EEDD;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #EDDC94;
+  color: #1B1710;
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ══════════════════════════════
+   PIE
+══════════════════════════════ */
+.contact-form-container-final {
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  text-align: center;
+  font-size: clamp(0.85rem, 1.4vw, 1rem);
+  color: #4a3f2f;
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════
+   MENSAJES DE ESTADO
+══════════════════════════════ */
+.exito-msg {
+  background: #dcfce7;
+  color: #15803d;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.error-msg {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+/* ══════════════════════════════
+   PRIMENG OVERRIDES
+══════════════════════════════ */
+::ng-deep .p-datepicker .p-inputtext {
+  background: white !important;
+  color: #1B1710 !important;
+  border: none !important;
+}
+
+::ng-deep .p-datepicker-today > .p-datepicker-day {
+  background: white !important;
+  color: #1B1710 !important;
+}
+
+::ng-deep .p-datepicker-day-selected {
+  background: #EDDC94 !important;
+  color: #1B1710 !important;
+}
+
+/* ══════════════════════════════
+   RESPONSIVE
+══════════════════════════════ */
+@media screen and (max-width: 600px) {
+  .contact-form { padding: clamp(1.25rem, 4vw, 1.75rem); }
+  .radio-group  { grid-template-columns: 1fr; }
+  .submit-button { max-width: 100%; }
+}

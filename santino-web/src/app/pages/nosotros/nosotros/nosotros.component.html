@@ -1,0 +1,61 @@
+<ng-container *ngIf="error">
+    <div class="error">{{ error }}</div>
+</ng-container>
+
+<ng-container *ngIf="section && !loading && !error">
+    <section>
+        <div class="fondo" [style.background-image]="'url(' + section.backgroundImage + ')'">
+            <div class="overlay">
+                <h1 id="titulo-producto">{{ section.title }}</h1>
+                <h2 id="frase-producto">{{ section.subtitle }}</h2>
+                <app-button></app-button>
+            </div>
+        </div>
+    </section>
+
+    <div class="card">
+        <p>Nuestra pasión, tu espacio</p>
+        <p-galleria [value]="section.images" [responsiveOptions]="responsiveOptions"
+            [containerStyle]="{ 'max-width': '100%', 'margin': '0 auto' }" [numVisible]="4" [circular]="true"
+            [showThumbnails]="true">
+            <ng-template pTemplate="item" let-item>
+                <img [src]="item.itemImageSrc" [alt]="item.alt"
+                    style="width: 100%; height: 500px; object-fit: cover;" />
+            </ng-template>
+            <ng-template pTemplate="thumbnail" let-item>
+                <img [src]="item.thumbnailImageSrc" [alt]="item.alt"
+                    style="width: 100%; height: 100px; object-fit: cover;" />
+            </ng-template>
+        </p-galleria>
+    </div>
+
+    <div>
+        <p>Comprometidos con tu confianza</p>
+    </div>
+
+    <section>
+        <div>
+            <video width="80%" height="auto" controls>
+                <source src="video/videonosotros2.mp4" type="video/mp4">
+            </video>
+
+        </div>
+    </section>
+
+    <section class="map-section">
+        <div class="map-container">
+            <p>Encuéntranos</p>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3644.0570729058823!2d-104.64827752568105!3d24.0290524780236!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x869bb751d4ce0c43%3A0x984a4eb9b235d298!2sSANTINO%20Cocinas%20e%20Interiores!5e0!3m2!1ses-419!2smx!4v1749509451399!5m2!1ses-419!2smx"
+                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </section>
+
+
+    <section id="marcas">
+        <app-galleria-marcas></app-galleria-marcas>
+        <app-button id="final"></app-button>
+    </section>
+
+</ng-container>

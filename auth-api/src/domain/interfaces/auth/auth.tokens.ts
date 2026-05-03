@@ -1,0 +1,3 @@
+export const AUTH_REPOSITORY = 'AUTH_REPOSITORY';
+export const HASH_SERVICE = 'HASH_SERVICE';
+export const TOKEN_SERVICE = 'TOKEN_SERVICE';

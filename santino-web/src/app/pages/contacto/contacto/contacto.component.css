@@ -1,0 +1,262 @@
+*{
+  font-family: 'Epilogue', sans-serif;
+}
+
+:host {
+  display: block;
+}
+
+h1{
+  color: #F2EEDD !important;
+}
+
+.contact-form-container-title {
+  display: flex;
+  font-size: 1.5rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
+  color: #F2EEDD;
+  margin-bottom: 40px;
+}
+
+.contact-form-container-final {
+  margin-top: 40px;
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
+  color: #F2EEDD;
+  margin-bottom: 40px;
+}
+
+.contact-form-container-title .logo {
+  width: 300px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.contact-form-container-title h1 {
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+.contact-form-container-title p {
+  margin: 0;
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.logo {
+  width: 50%;
+  height: auto;
+  position: relative;
+  transform: none;
+  top: auto;
+  left: auto;
+  z-index: 1;
+}
+
+.contact-form-container {
+  max-width: 1200px;
+  margin: 120px auto 50px;
+  padding: 0 20px;
+}
+
+.contact-form-container h1 {
+  text-align: center;
+  color: #1B1710;
+  margin-bottom: 40px;
+  font-size: 2.5rem;
+}
+
+.contact-form {
+  background-color: #F2EEDD;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+  margin-bottom: 40px;
+}
+
+.form-section h2 {
+  color: #1B1710;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #EDDC94;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  color: #1B1710;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #1B1710;
+  font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group input[type="email"],
+.form-group input[type="date"],
+.form-group input[type="time"],
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #EDDC94;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #1B1710;
+  background-color: white;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.radio-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  color: #1B1710 !important;
+
+  gap: 8px;
+}
+
+.radio-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #EDDC94;
+}
+
+.submit-button {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 40px auto 0;
+  padding: 15px 30px;
+  background-color: #1B1710;
+  color: #F2EEDD;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* :host :ng-deep .p-datepicker .p-datepicker-input {
+  background: #F2EEDD !important;
+  border-color: #EDDC94;
+
+} */
+
+::ng-deep .p-datepicker .p-inputtext{
+  background: white !important;
+  color: #1B1710 !important;
+  border:  none !important;
+  
+}
+
+::ng-deep .p-datepicker-today > .p-datepicker-day {
+  background: white !important;
+  color: #1B1710 !important;
+}
+
+::ng-deep .p-datepicker-day-selected {
+  background: #EDDC94 !important;
+  color: black !important;
+}
+
+.submit-button:hover {
+  background-color: #EDDC94;
+  color: #1B1710;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  .contact-form-container {
+    margin-top: 100px;
+    padding: 0 15px;
+  }
+
+  .contact-form {
+    padding: 20px;
+  }
+
+  .radio-group {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .contact-form-container h1 {
+    font-size: 2rem;
+  }
+
+  .form-section h2 {
+    font-size: 1.3rem;
+  }
+
+  .submit-button {
+    max-width: 100%;
+  }
+}
+/* Responsive styles for logo and h1 */
+@media screen and (max-width: 1200px) {
+  .contact-form-container-title .logo {
+    width: 250px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .contact-form-container-title .logo {
+    width: 200px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .contact-form-container-title .logo {
+    width: 180px;
+  }
+  .contact-form-container-title h1 {
+    font-size: 2rem;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .contact-form-container-title .logo {
+    width: 150px;
+  }
+  .contact-form-container-title h1 {
+    font-size: 1.8rem;
+  }
+  .contact-form-container-title p {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .contact-form-container-title .logo {
+    width: 120px;
+  }
+  .contact-form-container-title h1 {
+    font-size: 1.5rem;
+  }
+}

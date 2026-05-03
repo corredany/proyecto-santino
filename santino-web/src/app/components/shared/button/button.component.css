@@ -1,0 +1,13 @@
+:host ::ng-deep .p-button {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  padding: 0.65rem 1.75rem;
+  width: auto;
+  height: auto;
+}
+
+.boton-cotiza:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

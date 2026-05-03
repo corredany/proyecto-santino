@@ -1,0 +1,38 @@
+<div class="login-page">
+  <div class="login-card">
+
+    <div class="login-header">
+      <img src="img/santino.png" alt="Santino" class="login-logo">
+      <h1>Panel Administrativo</h1>
+      <hr class="gold-divider">
+    </div>
+
+    <div class="login-body">
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" [(ngModel)]="email" name="email" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <div class="input-password">
+            <input [type]="mostrarPassword ? 'text' : 'password'" id="password" [(ngModel)]="password" name="password" required autocomplete="current-password">
+            <button type="button" class="toggle-password" (click)="mostrarPassword = !mostrarPassword">
+              <i [class]="mostrarPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+            </button>
+          </div>
+        </div>
+
+        @if (error) {
+          <p class="error-msg">{{ error }}</p>
+        }
+
+        <button type="submit" [disabled]="cargando">
+          {{ cargando ? 'Ingresando...' : 'Ingresar' }}
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>

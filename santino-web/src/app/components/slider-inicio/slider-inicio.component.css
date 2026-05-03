@@ -1,0 +1,380 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font-body);
+}
+
+.slider-container {
+  background-color: #1B1710;
+  height: auto;
+}
+
+.swiper-container {
+  height: 65vh;
+}
+
+#titulo{
+  font-size: 1.8rem;
+  color: #FEFDF9;
+  font-weight: 500;
+  padding: 20px;
+}
+
+.carousel-container {
+  width: 100%;
+  height: 90vh;
+  padding: 3rem;
+}
+
+.card-list .card-item {
+  width: 400px;
+  border-radius: 80%;
+  margin: 20px;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background-color: #FEFDF9;
+}
+
+.card-list .card-item .user-profession {
+  font-size: 1.8rem;
+  color: #1B1710;
+  font-weight: 500;
+  margin: 14px 0 40px;
+}
+
+.card-list .card-item .user-image {
+  width: 300px;
+  height: 300px;
+  margin-bottom: 40px;
+}
+
+.card-list .card-item .message-button {
+  font-size: 1.25rem;
+  padding: 10px 35px;
+  font-weight: 500;
+  cursor: pointer;
+  background: #EDDC94;
+  transition: 0.2 ease;
+}
+
+.card-list .card-item .message-button:hover {
+  background: black;
+  border: 1px solid white;
+  color: white;
+}
+
+
+
+
+/* Estilos para centrar y dar formato básico */
+
+swiper-slide {
+  display: flex !important;
+  justify-content: center !important;
+  height: auto;
+}
+
+/* Personalización de navegación */
+swiper-container::part(button-prev),
+swiper-container::part(button-next) {
+  color: #dbbc34;
+  width: 40px;
+  height: 40px;
+  transition: all 0.3s ease;
+}
+
+swiper-container::part(button-prev):hover,
+swiper-container::part(button-next):hover {
+  color: #ffffff;
+  background-color: #9d4e0d;
+}
+
+/* Personalización de paginación */
+swiper-container::part(bullet) {
+  background-color: #c7bdbd;
+  opacity: 1;
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  transition: all 0.3s ease;
+}
+
+swiper-container::part(bullet-active) {
+  background-color: #EDDC94;
+  transform: scale(1.2);
+}
+
+/* Bullets dinámicos */
+swiper-container::part(bullet-active-main) {
+  background-color: #EDDC94;
+  transform: scale(1.5);
+}
+
+swiper-container::part(bullet-active-prev),
+swiper-container::part(bullet-active-next) {
+  background-color: #EDDC94;
+  opacity: 0.8;
+  transform: scale(1.2);
+}
+
+swiper-container::part(bullet-active-prev-prev),
+swiper-container::part(bullet-active-next-next) {
+  background-color: #EDDC94;
+  opacity: 0.5;
+  transform: scale(5);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  color: #FEFDF9;
+}
+
+.card-item {
+  background: var(--surface-card);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease;
+  margin: 1rem;
+  height: 500px;
+}
+
+.card-item:hover {
+  transform: translateY(-8px);
+}
+
+.card-image {
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.card-item:hover .card-image img {
+  transform: scale(1.05);
+}
+
+.card-content {
+  padding: 2rem;
+  text-align: center;
+}
+
+.card-title {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+  color: #1B1710;
+  font-weight: 500;
+}
+
+:host ::ng-deep .p-carousel .p-carousel-indicators {
+  margin-top: 2rem;
+}
+
+:host ::ng-deep .p-carousel .p-carousel-indicators .p-carousel-indicator {
+  margin-right: 0.75rem;
+}
+
+:host ::ng-deep .p-carousel .p-carousel-indicators .p-carousel-indicator button {
+  width: 3rem;
+  height: 0.5rem;
+  border-radius: 0;
+  background-color: #EDDC94;
+}
+
+.card-content .p-button {
+  background: #EDDC94;
+  color: #1B1710;
+  border: none;
+  font-size: 1.25rem;
+  padding: 12px 40px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.card-content .p-button:hover {
+  background: #1B1710;
+  color: #FEFDF9;
+  border: 1px solid #FEFDF9;
+}
+
+.card-content .p-button .p-button-icon {
+  margin-left: 0.5rem;
+}
+
+:host ::ng-deep .card-title {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  color: #1B1710;
+  font-weight: 500;
+}
+
+:host ::ng-deep .p-button {
+  background: var(--primary-color);
+  color: var(--primary-color-text);
+  border-color: #EDDC94;
+}
+
+:host ::ng-deep .p-carousel .p-carousel-indicators .p-carousel-indicator button {
+  background-color: #EDDC94;
+  border-color: #EDDC94;
+}
+
+:host ::ng-deep .p-carousel .p-carousel-indicators .p-carousel-indicator.p-highlight button {
+  background-color: #1B1710;
+  border-color: #1B1710;
+}
+:host ::ng-deep .p-carousel-indicator-active .p-carousel-indicator-button {
+  background: #EDDC94;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 1920px) {
+  .carousel-container {
+    height: 85vh;
+    padding: 2.5rem;
+  }
+  
+  .card-item {
+    height: 450px;
+  }
+  
+  .card-image {
+    height: 300px;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .carousel-container {
+    height: 80vh;
+    padding: 2rem;
+  }
+  
+  .section-title {
+    font-size: 2.2rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .card-item {
+    height: 400px;
+  }
+  
+  .card-image {
+    height: 280px;
+  }
+  
+  .card-title {
+    font-size: 1.3rem;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .carousel-container {
+    height: 75vh;
+    padding: 1.5rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .card-item {
+    height: 380px;
+  }
+  
+  .card-image {
+    height: 250px;
+  }
+  
+  .card-content {
+    padding: 1.5rem;
+  }
+  
+  .card-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .carousel-container {
+    height: 70vh;
+    padding: 1rem;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .card-item {
+    height: 350px;
+    margin: 0.5rem;
+  }
+  
+  .card-image {
+    height: 220px;
+  }
+  
+  .card-content {
+    padding: 1rem;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+  }
+  
+  .card-content .p-button {
+    padding: 10px 30px;
+    font-size: 1.1rem;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .carousel-container {
+    height: 65vh;
+    padding: 0.75rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .card-item {
+    height: 320px;
+    margin: 0.25rem;
+  }
+  
+  .card-image {
+    height: 200px;
+  }
+  
+  .card-content {
+    padding: 0.75rem;
+  }
+  
+  .card-title {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .card-content .p-button {
+    padding: 8px 25px;
+    font-size: 1rem;
+  }
+}

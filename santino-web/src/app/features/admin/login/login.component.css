@@ -1,0 +1,156 @@
+.login-page {
+  min-height: 100vh;
+  background: #1B1710;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  background: #FEFDF9;
+  border-radius: 12px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+}
+
+.login-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.login-body {
+  width: 100%;
+}
+
+.login-logo {
+  width: 150px;
+  height: auto;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #1B1710;
+  margin: 0;
+  text-align: center;
+}
+
+.gold-divider {
+  width: 48px;
+  height: 2px;
+  background: #EDDC94;
+  border: none;
+  margin: -0.75rem 0 0;
+}
+
+form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+label {
+  font-size: 0.85rem;
+  color: #4a3f2f;
+  font-weight: 500;
+  font-family: var(--font-body);
+}
+
+input {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid rgba(27,23,16,0.2);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  outline: none;
+  background: white;
+  color: #1B1710;
+  font-family: var(--font-body);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input:focus {
+  border-color: #EDDC94;
+  box-shadow: 0 0 0 3px rgba(237,220,148,0.3);
+}
+
+.input-password {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-password input {
+  width: 100%;
+  padding-right: 2.75rem;
+  box-sizing: border-box;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 0.6rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  color: #a89880;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+
+.toggle-password:hover {
+  color: #1B1710;
+}
+
+.toggle-password i {
+  font-size: 1rem;
+}
+
+button[type="submit"] {
+  padding: 0.75rem;
+  background: #EDDC94;
+  color: #1B1710;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.15s, color 0.15s;
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  background: #1B1710;
+  color: #F2EEDD;
+}
+
+button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-msg {
+  color: #dc2626;
+  font-size: 0.875rem;
+  text-align: center;
+  margin: 0;
+}

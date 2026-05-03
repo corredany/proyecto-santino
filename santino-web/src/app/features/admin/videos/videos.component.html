@@ -1,0 +1,77 @@
+<div class="page-header">
+  <h1>Videos</h1>
+</div>
+
+<div class="upload-panel">
+  <h2>Subir video</h2>
+  <div class="form-row">
+    <div class="form-group">
+      <label>Sección (opcional)</label>
+      <select [(ngModel)]="seccionId" (change)="cargar()">
+        <option [ngValue]="undefined">Todas</option>
+        @for (s of secciones; track s.id) {
+          <option [ngValue]="s.id">{{ s.nombre }}</option>
+        }
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Orden</label>
+      <input type="number" [(ngModel)]="orden">
+    </div>
+  </div>
+  <div class="upload-area" (click)="fileInput.click()">
+    <input #fileInput type="file" accept="video/*" style="display:none" (change)="onFileChange($event)">
+    {{ archivoSeleccionado ? archivoSeleccionado.name : 'Haz clic para seleccionar un video' }}
+  </div>
+  <button class="btn-primary" (click)="subir()" [disabled]="!archivoSeleccionado || subiendo">
+    {{ subiendo ? 'Subiendo...' : 'Subir video' }}
+  </button>
+</div>
+
+@if (cargando) { <p class="loading-msg">Cargando videos...</p> }
+
+<div class="data-table-wrapper">
+  <table class="data-table">
+    <thead>
+      <tr><th>ID</th><th>URL</th><th>Orden</th><th>Sección</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+      @for (v of videos; track v.id) {
+        @if (editandoId === v.id) {
+          <tr class="edit-row">
+            <td>{{ v.id }}</td>
+            <td><a [href]="v.url" target="_blank">Ver video</a></td>
+            <td>
+              <input type="number" [(ngModel)]="editOrden" class="edit-input-sm">
+            </td>
+            <td>
+              <select [(ngModel)]="editSeccionId" class="edit-select">
+                <option [ngValue]="null">Sin sección</option>
+                @for (s of secciones; track s.id) {
+                  <option [ngValue]="s.id">{{ s.nombre }}</option>
+                }
+              </select>
+            </td>
+            <td class="actions-cell">
+              <button class="btn-primary" (click)="guardar(v.id)" [disabled]="guardando">
+                {{ guardando ? 'Guardando...' : 'Guardar' }}
+              </button>
+              <button class="btn-cancel" (click)="cancelarEdicion()">Cancelar</button>
+            </td>
+          </tr>
+        } @else {
+          <tr>
+            <td>{{ v.id }}</td>
+            <td><a [href]="v.url" target="_blank">Ver video</a></td>
+            <td>{{ v.orden }}</td>
+            <td>{{ nombreSeccion(v.seccionId) }}</td>
+            <td class="actions-cell">
+              <button class="btn-edit" (click)="abrirEdicion(v)">Editar</button>
+              <button class="btn-delete" (click)="eliminar(v.id)">Eliminar</button>
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Rol {
+  id       Int          @id @default(autoincrement())
+  nombre   String       @unique
+  usuarios Usuario[]
+  permisos RolPermiso[]
+}
+
+model Permiso {
+  id      Int          @id @default(autoincrement())
+  nombre  String       @unique
+  roles   RolPermiso[]
+}
+
+model RolPermiso {
+  rolId     Int
+  permisoId Int
+  rol       Rol     @relation(fields: [rolId], references: [id])
+  permiso   Permiso @relation(fields: [permisoId], references: [id])
+
+  @@id([rolId, permisoId])
+}
+
+model Usuario {
+  id             Int             @id @default(autoincrement())
+  nombre         String
+  email          String          @unique
+  contrasena     String
+  rolId          Int
+  rol            Rol             @relation(fields: [rolId], references: [id])
+  creadoEn       DateTime        @default(now())
+  actualizadoEn  DateTime        @updatedAt
+  tokens         TokenRefresco[]
+}
+
+model TokenRefresco {
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  usuarioId   Int
+  usuario     Usuario   @relation(fields: [usuarioId], references: [id])
+  expiraEn    DateTime
+  revocado    Boolean   @default(false)
+  revocadoEn  DateTime?
+  ipAddress   String?
+  userAgent   String?
+  creadoEn    DateTime  @default(now())
+}

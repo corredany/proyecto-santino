@@ -1,0 +1,26 @@
+.marcas-wrapper {
+  padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem);
+  background-color: #FEFDF9;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.4vw, 1.2rem);
+  color: #84704E;
+  text-align: center;
+  margin: 0 0 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+::ng-deep .p-galleria-thumbnail-item {
+  padding: 0 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .p-galleria-thumbnails {
+  padding: 0.5rem 0;
+}

@@ -1,0 +1,12 @@
+:host ::ng-deep .p-button{
+    width: auto;
+    height: auto;
+    font-size: 40px;
+    padding: 20px;
+  }
+
+
+  .boton-cotiza:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  }

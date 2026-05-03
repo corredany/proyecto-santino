@@ -1,0 +1,75 @@
+@if (error) {
+  <div class="error">{{ error }}</div>
+}
+
+@if (loading) {
+  <div class="loading">Cargando...</div>
+}
+
+@if (seccion && !loading && !error) {
+  <section>
+    <div class="fondo" [style.background-image]="imagenes[0] ? 'url(' + imagenes[0].url + ')' : 'url(img/fondo.jpg)'">
+      <div class="overlay">
+        <h1 id="titulo-producto">{{ seccion.nombre }}</h1>
+        <h2 id="frase-producto">{{ seccion.descripcionPrincipal }}</h2>
+        <app-button></app-button>
+      </div>
+    </div>
+  </section>
+
+  @if (seccion.descripcionSeccion) {
+    <section class="descripcion-seccion">
+      <p>{{ seccion.descripcionSeccion }}</p>
+    </section>
+  }
+
+  <div class="card">
+    <p>Nuestros más recientes proyectos</p>
+    @if (imagenes.length > 0) {
+      <p-galleria
+        [value]="imagenes"
+        [responsiveOptions]="responsiveOptions"
+        [containerStyle]="{ 'max-width': '100%', 'margin': '0 auto' }"
+        [numVisible]="4"
+        [circular]="true"
+        [showThumbnails]="true">
+        <ng-template pTemplate="item" let-item>
+          <img [src]="item.url" [alt]="seccion!.nombre"
+            style="width: 100%; height: 500px; object-fit: cover;" />
+        </ng-template>
+        <ng-template pTemplate="thumbnail" let-item>
+          <img [src]="item.url" [alt]="seccion!.nombre"
+            style="width: 100%; height: 100px; object-fit: cover;" />
+        </ng-template>
+      </p-galleria>
+    } @else {
+      <p style="font-size: 1.2rem; padding: 2rem; color: #84704E;">
+        Próximamente más proyectos en esta sección.
+      </p>
+    }
+  </div>
+
+  @if (materiales.length > 0) {
+    <section class="materiales-section">
+      <h2 class="section-heading">Materiales disponibles</h2>
+      <div class="materiales-grid">
+        @for (mat of materiales; track mat.id) {
+          <div class="material-card">
+            <img [src]="mat.url" [alt]="mat.nombre" class="material-img" />
+            <div class="material-info">
+              <span class="material-nombre">{{ mat.nombre }}</span>
+              @if (mat.descripcion) {
+                <span class="material-desc">{{ mat.descripcion }}</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  }
+
+  <section id="marcas">
+    <app-galleria-marcas></app-galleria-marcas>
+    <app-button id="final"></app-button>
+  </section>
+}

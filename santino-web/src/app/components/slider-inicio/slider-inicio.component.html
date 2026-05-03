@@ -1,0 +1,29 @@
+<div class="carousel-container">
+  <h2 class="section-title">Nuestros servicios</h2>
+
+  <p-carousel
+    [value]="slides"
+    [numVisible]="3"
+    [numScroll]="1"
+    [circular]="true"
+    [showIndicators]="true"
+    [responsiveOptions]="responsiveOptions">
+
+    <ng-template let-slide pTemplate="item">
+      <div class="card-item">
+        <div class="card-image">
+          <img [src]="slide.imagenUrl" [alt]="slide.nombre" />
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">{{ slide.nombre }}</h3>
+          <p-button
+            label="Conoce más"
+            icon="pi pi-arrow-right"
+            iconPos="right"
+            [routerLink]="['/servicios', slide.slug]" />
+        </div>
+      </div>
+    </ng-template>
+
+  </p-carousel>
+</div>

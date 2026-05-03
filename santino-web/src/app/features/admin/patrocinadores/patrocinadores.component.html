@@ -1,0 +1,70 @@
+<div class="page-header">
+  <h1>Patrocinadores / Marcas</h1>
+</div>
+
+<div class="upload-panel">
+  <h2>Agregar patrocinador</h2>
+  <div class="form-row">
+    <div class="form-group">
+      <label>Nombre *</label>
+      <input type="text" [(ngModel)]="nombre" placeholder="Ej. Blum">
+    </div>
+    <div class="form-group">
+      <label>Sitio web *</label>
+      <input type="url" [(ngModel)]="url" placeholder="https://...">
+    </div>
+  </div>
+  <div class="upload-area" (click)="fileInput.click()">
+    <input #fileInput type="file" accept="image/*" style="display:none" (change)="onFileChange($event)">
+    {{ archivo ? archivo.name : 'Haz clic para seleccionar el logo' }}
+  </div>
+  <button class="btn-primary" (click)="crear()" [disabled]="!archivo || !nombre || !url || subiendo">
+    {{ subiendo ? 'Guardando...' : 'Agregar patrocinador' }}
+  </button>
+</div>
+
+@if (cargando) { <p class="loading-msg">Cargando...</p> }
+
+<div class="grid-imgs">
+  @for (p of patrocinadores; track p.id) {
+    <div class="img-card" [class.editando]="editandoId === p.id">
+      <div class="logo-wrap">
+        <img [src]="p.url" [alt]="p.nombre">
+      </div>
+
+      @if (editandoId === p.id) {
+        <div class="edit-panel">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" [(ngModel)]="editNombre">
+          </div>
+          <div class="form-group">
+            <label>Sitio web</label>
+            <input type="url" [(ngModel)]="editUrl">
+          </div>
+          <div class="form-group">
+            <label>Orden</label>
+            <input type="number" [(ngModel)]="editOrden">
+          </div>
+          <div class="edit-actions">
+            <button class="btn-primary" (click)="guardar(p.id)" [disabled]="guardando">
+              {{ guardando ? 'Guardando...' : 'Guardar' }}
+            </button>
+            <button class="btn-cancel" (click)="cancelarEdicion()">Cancelar</button>
+          </div>
+        </div>
+      } @else {
+        <div class="img-card-footer">
+          <div class="pat-info">
+            <span class="pat-nombre">{{ p.nombre }}</span>
+            <span class="pat-orden">orden {{ p.orden }}</span>
+          </div>
+          <div class="img-card-actions">
+            <button class="btn-edit" (click)="abrirEdicion(p)">Editar</button>
+            <button class="btn-delete" (click)="eliminar(p.id)">Eliminar</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,55 @@
+<div class="page-header">
+  <h1>Citas</h1>
+</div>
+
+@if (editandoId) {
+  <div class="modal-overlay" (click)="editandoId = null">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>Editar cita #{{ editandoId }}</h2>
+      <div class="form-group">
+        <label>Estado</label>
+        <select [(ngModel)]="form.estado">
+          <option value="pendiente">Pendiente</option>
+          <option value="confirmada">Confirmada</option>
+          <option value="cancelada">Cancelada</option>
+          <option value="completada">Completada</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea [(ngModel)]="form.notas" rows="3"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" (click)="editandoId = null">Cancelar</button>
+        <button class="btn-primary" (click)="guardar()">Guardar</button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (cargando) { <p class="loading-msg">Cargando citas...</p> }
+
+<table class="data-table">
+  <thead>
+    <tr><th>ID</th><th>Cliente</th><th>Fecha</th><th>Estado</th><th>Descripción</th><th>Acciones</th></tr>
+  </thead>
+  <tbody>
+    @for (c of citas; track c.id) {
+      <tr>
+        <td>{{ c.id }}</td>
+        <td>{{ c.nombreCliente }}</td>
+        <td>{{ c.fecha | date:'dd/MM/yyyy' }} {{ c.hora | slice:0:5 }}</td>
+        <td>
+          <span class="badge" [class.badge-on]="c.estado === 'confirmada' || c.estado === 'completada'">
+            {{ c.estado }}
+          </span>
+        </td>
+        <td>{{ c.notas }}</td>
+        <td class="actions">
+          <button class="btn-edit" (click)="abrirEditar(c)">Editar</button>
+          <button class="btn-delete" (click)="eliminar(c.id)">Eliminar</button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

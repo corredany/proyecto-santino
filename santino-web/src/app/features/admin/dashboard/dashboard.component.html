@@ -1,0 +1,23 @@
+<div class="dashboard">
+
+  <header class="dash-hero">
+    <img src="/img/santino.png" alt="Santino" class="dash-logo" />
+    <div class="dash-hero-text">
+      <h1>Panel Administrativo</h1>
+      <p>Gestiona el contenido del sitio web de Santino</p>
+    </div>
+    <hr class="gold-line" />
+  </header>
+
+  <section class="dash-grid">
+    @for (acceso of accesos; track acceso.ruta) {
+      <a [routerLink]="acceso.ruta" class="dash-card">
+        <div class="dash-card-icon">
+          <i [class]="'pi ' + acceso.icono"></i>
+        </div>
+        <span class="dash-card-label">{{ acceso.label }}</span>
+      </a>
+    }
+  </section>
+
+</div>

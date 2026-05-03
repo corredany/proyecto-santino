@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Seccion {
+  id                   Int       @id @default(autoincrement())
+  nombre               String    @unique
+  descripcionPrincipal String?
+  descripcionSeccion   String?
+  esFija               Boolean   @default(false)
+  visible              Boolean   @default(true)
+  orden                Int       @default(0)
+  creadoPor            Int?
+  actualizadoPor       Int?
+  creadoEn             DateTime  @default(now())
+  actualizadoEn        DateTime  @updatedAt
+  imagenes             Imagen[]
+  videos               Video[]
+  materiales           Material[]
+}
+
+model Imagen {
+  id             Int      @id @default(autoincrement())
+  url            String   @unique
+  rutaArchivo    String
+  orden          Int      @default(0)
+  seccionId      Int?
+  seccion        Seccion? @relation(fields: [seccionId], references: [id])
+  creadoPor      Int?
+  actualizadoPor Int?
+  creadoEn       DateTime @default(now())
+  actualizadoEn  DateTime @updatedAt
+}
+
+model Video {
+  id             Int      @id @default(autoincrement())
+  url            String
+  rutaArchivo       String
+  orden          Int      @default(0)
+  seccionId      Int?
+  seccion        Seccion? @relation(fields: [seccionId], references: [id])
+  creadoPor      Int?
+  actualizadoPor Int?
+  creadoEn       DateTime @default(now())
+  actualizadoEn  DateTime @updatedAt
+}
+
+model Material {
+  id             Int      @id @default(autoincrement())
+  nombre         String   @default("")
+  descripcion    String?
+  url            String
+  rutaArchivo    String
+  orden          Int      @default(0)
+  seccionId      Int?
+  seccion        Seccion? @relation(fields: [seccionId], references: [id])
+  creadoPor      Int?
+  actualizadoPor Int?
+  creadoEn       DateTime @default(now())
+  actualizadoEn  DateTime @updatedAt
+}
+
+model Patrocinador {
+  id             Int      @id @default(autoincrement())
+  nombre         String   @unique
+  url            String
+  rutaArchivo    String
+  orden          Int      @default(0)
+  creadoPor      Int?
+  actualizadoPor Int?
+  creadoEn       DateTime @default(now())
+  actualizadoEn  DateTime @updatedAt
+}

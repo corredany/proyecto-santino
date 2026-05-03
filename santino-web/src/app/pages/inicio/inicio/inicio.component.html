@@ -1,0 +1,96 @@
+<main class="color">
+  <section>
+    <div class="fondo">
+      <div class="overlay">
+          <img src="img/santino.png" alt="Logo de Santino" class="logo">
+          <h1 id="frase-logo">Diseños funcionales y elegantes para el corazón de tu hogar</h1>
+          <app-button></app-button>
+      </div>
+    </div>
+  </section>
+
+  <section class="resumen">
+    
+    <div class="imagen-resumen">
+      <div class="imagen-resumen-icon">
+        <img src="img/apreton-de-manos (3).png" alt="Apretón de manos" class="img">
+      </div>
+      <h2>Comprometidos con tu confianza</h2>
+    </div>
+    <div class="imagen-resumen">
+      <div class="imagen-resumen-icon">
+        <img src="img/martillo (1).png" alt="Martillo" class="img">
+      </div>
+      <h2>Diseñamos con experiencia, fabricamos con valores</h2>
+    </div>
+    <div class="imagen-resumen">
+      <div class="imagen-resumen-icon">
+        <img src="img/calidad.png" alt="Materiales de calidad" class="img">
+      </div>
+      <h2>Materiales de calidad</h2>
+    </div>
+  </section>
+  
+    <app-slider-inicio></app-slider-inicio>
+
+  <section class="video-section">
+    <h2 id="video-title">¿Cómo lo logramos?</h2>
+      <p id="video-text">Cada proyecto comienza con una idea.</p>
+      <video controls id="video1">
+        <source src="video/inicio1.mp4" type="video/mp4">
+      </video>
+      
+      <video controls id="video2">
+        <source src="video/inicio2.mp4" type="video/mp4">
+      </video>
+      <p id="video-text2">Tu formas parte de esa idea.</p>
+      
+  </section>
+
+  <section class="imagen-comparacion-section">
+    <div class="imagen-comparacion">
+      <p>Nosotros la modelamos</p>
+      <p-imagecompare class="shadow-lg rounded-2xl">
+        <ng-template #left>
+            <img src="img/cocina1.jpg" />
+        </ng-template>
+        <ng-template #right>
+            <img src="img/cocina2.jpeg" />
+        </ng-template>
+    </p-imagecompare>
+    </div>
+
+    
+  </section>
+
+<section class="imagen-comparacion-section">
+  <div class ="imagen-comparacion">
+    <p>Lo construimos</p>
+    <video width="1000vh" height="auto" controls>
+      <source src="video/inicio3.mp4" type="video/mp4">
+    </video>  
+  </div>
+</section>
+  
+<app-galleria-marcas></app-galleria-marcas>
+  <section class="marcas-section">
+    <div>
+      <p>Al final,<br> Terminamos un proyecto, <br>pero comenzamos una historia juntos</p>
+      <app-button></app-button>
+      <hr class="custom-hr">
+    </div>
+  </section>
+
+
+
+  <section class="nosotos-section">
+    <h2>Más que diseñar cocinas, construimos confianza</h2>
+    <video width="1000vh" height="auto" controls>
+      <source src="video/inicio4.mp4" type="video/mp4">
+    </video>
+    <p>Conoce la historia, los valores y la pasión detras de cada proyecto.</p>
+    <p>En Santino, cada detalle habla de quienes somos.</p>
+    <app-nosotros-button></app-nosotros-button>
+  </section>
+  
+</main>

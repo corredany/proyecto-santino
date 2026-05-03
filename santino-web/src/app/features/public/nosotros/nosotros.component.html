@@ -1,0 +1,83 @@
+@if (error) {
+  <div class="error">{{ error }}</div>
+}
+
+@if (loading) {
+  <div class="loading">Cargando...</div>
+}
+
+@if (!loading && !error) {
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="fondo"
+      [style.background-image]="imagenes[0] ? 'url(' + imagenes[0].url + ')' : 'url(img/fondo.jpg)'">
+      <div class="overlay">
+        <h1 class="hero-title">{{ seccion?.nombre ?? 'Nosotros' }}</h1>
+        <p class="hero-subtitle">{{ seccion?.descripcionPrincipal ?? 'Conoce nuestra historia' }}</p>
+        <app-button />
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Declaración de valores (fondo oscuro) ── -->
+  <section class="intro-section">
+    <p class="intro-quote">Comprometidos con tu confianza</p>
+    @if (seccion?.descripcionSeccion) {
+      <p class="intro-body">{{ seccion!.descripcionSeccion }}</p>
+    }
+  </section>
+
+  <!-- ── Galería de imágenes ── -->
+  @if (imagenes.length > 0) {
+    <section class="galeria-section">
+      <h2 class="section-heading">Nuestra pasión, tu espacio</h2>
+      <p-galleria
+        [value]="imagenes"
+        [responsiveOptions]="responsiveOptions"
+        [containerStyle]="{ 'max-width': '100%' }"
+        [numVisible]="4"
+        [circular]="true"
+        [showThumbnails]="true">
+        <ng-template pTemplate="item" let-item>
+          <img [src]="item.url" alt="Nosotros" class="galeria-img" />
+        </ng-template>
+        <ng-template pTemplate="thumbnail" let-item>
+          <img [src]="item.url" alt="Nosotros" class="galeria-thumb" />
+        </ng-template>
+      </p-galleria>
+    </section>
+  }
+
+  <!-- ── Video ── -->
+  @if (videos.length > 0) {
+    <section class="video-section">
+      <h2 class="section-heading">Conócenos</h2>
+      @for (video of videos; track video.id) {
+        <video controls>
+          <source [src]="video.url" type="video/mp4">
+        </video>
+      }
+    </section>
+  }
+
+  <!-- ── Mapa ── -->
+  <section class="map-section">
+    <div class="map-container">
+      <h2 class="section-heading">Encuéntranos</h2>
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3644.0570729058823!2d-104.64827752568105!3d24.0290524780236!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x869bb751d4ce0c43%3A0x984a4eb9b235d298!2sSANTINO%20Cocinas%20e%20Interiores!5e0!3m2!1ses-419!2smx!4v1749509451399!5m2!1ses-419!2smx"
+        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </section>
+
+  <!-- ── Marcas + CTA ── -->
+  <section class="marcas-section">
+    <app-galleria-marcas />
+    <div class="marcas-cta">
+      <app-button />
+    </div>
+  </section>
+
+}
