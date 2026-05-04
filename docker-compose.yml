@@ -3,7 +3,9 @@ services:
   # ─── PostgreSQL: auth_db ───────────────────────────────────────────────────
 
   postgres-auth:
-    image: postgres:16
+    build:
+      context: ./postgres
+      dockerfile: primary.Dockerfile
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -20,7 +22,6 @@ services:
     volumes:
       - postgres_auth_data:/var/lib/postgresql/data
       - ./db-seeds/auth_db.sql:/docker-entrypoint-initdb.d/01_restore.sql
-      - ./postgres/primary-init.sh:/docker-entrypoint-initdb.d/02_replication.sh
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -h 127.0.0.1"]
@@ -52,7 +53,9 @@ services:
   # ─── PostgreSQL: contenido_db ──────────────────────────────────────────────
 
   postgres-contenido:
-    image: postgres:16
+    build:
+      context: ./postgres
+      dockerfile: primary.Dockerfile
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -69,7 +72,6 @@ services:
     volumes:
       - postgres_contenido_data:/var/lib/postgresql/data
       - ./db-seeds/contenido_db.sql:/docker-entrypoint-initdb.d/01_restore.sql
-      - ./postgres/primary-init.sh:/docker-entrypoint-initdb.d/02_replication.sh
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -h 127.0.0.1"]
