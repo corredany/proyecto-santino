@@ -118,24 +118,36 @@ services:
       retries: 10
       start_period: 45s
 
+  # ─── HAProxy ───────────────────────────────────────────────────────────────
+
+  haproxy:
+    image: haproxy:2.9-alpine
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    restart: unless-stopped
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+      postgres-contenido:
+        condition: service_healthy
+
   # ─── APIs ──────────────────────────────────────────────────────────────────
 
   auth-api:
     build: ./auth-api
     environment:
-      DATABASE_URL: "postgresql://postgres:${POSTGRES_PASSWORD}@postgres-auth:5432/auth_db?schema=public"
+      DATABASE_URL: "postgresql://postgres:${POSTGRES_PASSWORD}@haproxy:5433/auth_db?schema=public&connection_limit=5&pool_timeout=10&connect_timeout=5"
       JWT_SECRET: ${JWT_SECRET}
       JWT_ACCESS_EXPIRATION: 15m
       JWT_REFRESH_EXPIRATION: 7d
     restart: unless-stopped
     depends_on:
-      postgres-auth:
-        condition: service_healthy
+      - haproxy
 
   contenido-api:
     build: ./contenido-api
     environment:
-      DATABASE_URL: "postgresql://postgres:${POSTGRES_PASSWORD}@postgres-contenido:5432/contenido_db?schema=public"
+      DATABASE_URL: "postgresql://postgres:${POSTGRES_PASSWORD}@haproxy:5434/contenido_db?schema=public&connection_limit=5&pool_timeout=10&connect_timeout=5"
       JWT_SECRET: ${JWT_SECRET}
       JWT_ACCESS_EXPIRATION: 15m
       JWT_REFRESH_EXPIRATION: 7d
@@ -144,8 +156,7 @@ services:
       - ./db-seeds/uploads:/app/uploads
     restart: unless-stopped
     depends_on:
-      postgres-contenido:
-        condition: service_healthy
+      - haproxy
 
   api-net:
     build: ./api-net/citas-api
