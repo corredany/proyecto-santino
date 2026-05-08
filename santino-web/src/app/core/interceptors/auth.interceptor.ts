@@ -1,9 +1,11 @@
-import { HttpInterceptorFn, HttpRequest, HttpHandlerFn } from '@angular/common/http';
+import { HttpContextToken, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, switchMap, throwError } from 'rxjs';
+import { catchError, switchMap, throwError, timer } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 
-const addToken = (req: HttpRequest<unknown>, token: string) =>
+const RETRIED = new HttpContextToken(() => false);
+
+const addToken = (req: Parameters<HttpInterceptorFn>[0], token: string) =>
   req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
 
 const isAuthEndpoint = (url: string) =>
@@ -12,7 +14,6 @@ const isAuthEndpoint = (url: string) =>
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
 
-  // No adjuntar token ni interceptar errores en las rutas de autenticación
   if (isAuthEndpoint(req.url)) return next(req);
 
   const token = authService.getToken();
@@ -20,6 +21,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((err) => {
+      if ((err.status === 502 || err.status === 503) && !req.context.get(RETRIED)) {
+        const retryReq = req.clone({ context: req.context.set(RETRIED, true) });
+        return timer(1000).pipe(
+          switchMap(() => next(token ? addToken(retryReq, token) : retryReq)),
+        );
+      }
       if (err.status === 401 && authService.getRefreshToken()) {
         return authService.refresh().pipe(
           catchError(() => {
