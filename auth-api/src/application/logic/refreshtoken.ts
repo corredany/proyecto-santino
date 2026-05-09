@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import type { IAuthRepository } from '../../domain/interfaces/auth/auth.repository.interface';
 import type { ITokenService } from '../../domain/interfaces/auth/token.service.interface';
 import { AUTH_REPOSITORY, TOKEN_SERVICE } from '../../domain/interfaces/auth/auth.tokens';
+import type { RefreshResponseDto } from '../../domain/dtos/auth.dto';
 import {
   TokenInvalidoException,
   TokenRevocadoException,
@@ -15,7 +16,7 @@ export class RefreshTokenUseCase {
     @Inject(TOKEN_SERVICE) private readonly tokenService: ITokenService,
   ) {}
 
-  async execute(token: string): Promise<{ accessToken: string }> {
+  async execute(token: string): Promise<RefreshResponseDto> {
     const payload = this.tokenService.verificarRefreshToken(token);
     if (!payload) throw new TokenInvalidoException();
 
@@ -27,6 +28,8 @@ export class RefreshTokenUseCase {
     const usuario = await this.authRepository.encontrarUsuarioPorId(payload.id);
     if (!usuario) throw new UsuarioNoEncontradoException();
 
+    await this.authRepository.revocarTokenRefresco(token);
+
     const accessToken = this.tokenService.generarAccessToken({
       id: usuario.id,
       email: usuario.email,
@@ -35,6 +38,19 @@ export class RefreshTokenUseCase {
       permisos: usuario.permisos ?? [],
     });
 
-    return { accessToken };
+    const nuevoRefreshToken = this.tokenService.generarRefreshToken({ id: usuario.id });
+
+    const expiraEn = new Date();
+    expiraEn.setDate(expiraEn.getDate() + 7);
+
+    await this.authRepository.guardarTokenRefresco({
+      token: nuevoRefreshToken,
+      usuarioId: usuario.id,
+      expiraEn,
+      revocado: false,
+      revocadoEn: null,
+    });
+
+    return { accessToken, refreshToken: nuevoRefreshToken };
   }
 }

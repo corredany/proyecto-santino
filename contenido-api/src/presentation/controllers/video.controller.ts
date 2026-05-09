@@ -1,8 +1,9 @@
 import {
   Controller, Get, Post, Put, Delete,
-  Body, Param, UseGuards, UseInterceptors, UploadedFile,
+  Body, Param, UseGuards, UseInterceptors, UploadedFile, BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Throttle } from '@nestjs/throttler';
 import { memoryStorage } from 'multer';
 import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
 import { PermisosGuard } from '../../infrastructure/guards/permisos.guard';
@@ -34,7 +35,18 @@ export class VideoController {
   @Post()
   @UseGuards(JwtGuard, PermisosGuard)
   @RequierePermiso('contenido:gestionar')
-  @UseInterceptors(FileInterceptor('archivo', { storage: memoryStorage() }))
+  @Throttle({ upload: { ttl: 60000, limit: 10 } })
+  @UseInterceptors(FileInterceptor('archivo', {
+    storage: memoryStorage(),
+    fileFilter: (_req, file, cb) => {
+      const allowed = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'];
+      if (allowed.includes(file.mimetype)) {
+        cb(null, true);
+      } else {
+        cb(new BadRequestException('Solo se permiten videos (mp4, webm, ogg, mov)'), false);
+      }
+    },
+  }))
   subir(
     @UploadedFile() archivo: Express.Multer.File,
     @Body() body: { seccionId?: string; orden?: string },

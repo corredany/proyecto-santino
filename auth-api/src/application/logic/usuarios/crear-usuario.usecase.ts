@@ -1,11 +1,21 @@
 import { Injectable, ConflictException } from '@nestjs/common';
+import { IsEmail, IsInt, IsString, MinLength } from 'class-validator';
 import * as bcrypt from 'bcrypt';
 import { prisma } from '../../../infrastructure/database/prisma';
 
 export class CrearUsuarioDto {
+  @IsString()
+  @MinLength(1)
   nombre: string;
+
+  @IsEmail()
   email: string;
+
+  @IsString()
+  @MinLength(6)
   contrasena: string;
+
+  @IsInt()
   rolId: number;
 }
 

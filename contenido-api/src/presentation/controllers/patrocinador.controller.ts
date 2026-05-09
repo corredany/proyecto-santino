@@ -1,8 +1,9 @@
 import {
   Controller, Get, Post, Put, Delete,
-  Body, Param, UseGuards, UseInterceptors, UploadedFile,
+  Body, Param, UseGuards, UseInterceptors, UploadedFile, BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Throttle } from '@nestjs/throttler';
 import { memoryStorage } from 'multer';
 import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
 import { PermisosGuard } from '../../infrastructure/guards/permisos.guard';
@@ -29,7 +30,18 @@ export class PatrocinadorController {
   @Post()
   @UseGuards(JwtGuard, PermisosGuard)
   @RequierePermiso('contenido:gestionar')
-  @UseInterceptors(FileInterceptor('logo', { storage: memoryStorage() }))
+  @Throttle({ upload: { ttl: 60000, limit: 10 } })
+  @UseInterceptors(FileInterceptor('logo', {
+    storage: memoryStorage(),
+    fileFilter: (_req, file, cb) => {
+      const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      if (allowed.includes(file.mimetype)) {
+        cb(null, true);
+      } else {
+        cb(new BadRequestException('Solo se permiten imágenes (jpeg, png, gif, webp)'), false);
+      }
+    },
+  }))
   crear(
     @UploadedFile() logo: Express.Multer.File,
     @Body() dto: CrearPatrocinadorDto,

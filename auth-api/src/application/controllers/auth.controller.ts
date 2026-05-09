@@ -3,7 +3,7 @@ import { Throttle, SkipThrottle } from '@nestjs/throttler';
 import { LoginUseCase } from '../logic/login';
 import { RefreshTokenUseCase } from '../logic/refreshtoken';
 import { LogoutUseCase } from '../logic/logout';
-import type { LoginDto, RefreshTokenDto, LogoutDto } from '../../domain/dtos/auth.dto';
+import { LoginDto, RefreshTokenDto, LogoutDto } from '../../domain/dtos/auth.dto';
 
 @Controller('auth')
 export class AuthController {

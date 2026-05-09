@@ -42,10 +42,11 @@ export class AuthService {
   refresh() {
     const token = localStorage.getItem(this.REFRESH_KEY);
     return this.http
-      .post<{ accessToken: string }>(`${environment.authApi}/auth/refresh`, { token })
+      .post<{ accessToken: string; refreshToken: string }>(`${environment.authApi}/auth/refresh`, { token })
       .pipe(
         tap((res) => {
           localStorage.setItem(this.TOKEN_KEY, res.accessToken);
+          localStorage.setItem(this.REFRESH_KEY, res.refreshToken);
         }),
       );
   }
@@ -58,8 +59,12 @@ export class AuthService {
   }
 
   logout(): void {
+    const token = this.getRefreshToken();
     this.clearTokens();
     this.router.navigate(['/admin/login']);
+    if (token) {
+      this.http.post(`${environment.authApi}/auth/logout`, { token }).subscribe({ error: () => {} });
+    }
   }
 
   getUsuario(): UsuarioSesion | null {
