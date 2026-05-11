@@ -14,4 +14,4 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 RUN npx prisma generate
 EXPOSE 3001
-CMD ["sh", "-c", "npx prisma db push && node prisma/seed.mjs && node dist/main"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node prisma/seed.mjs && node dist/main"]
