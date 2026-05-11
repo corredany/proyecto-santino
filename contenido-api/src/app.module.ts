@@ -16,11 +16,6 @@ import { PatrocinadorModule } from './presentation/modules/patrocinador.module';
         ttl: 60000,
         limit: 60,
       },
-      {
-        name: 'upload',
-        ttl: 60000,
-        limit: 10,
-      },
     ]),
     InfrastructureModule,
     SeccionModule,

@@ -35,7 +35,7 @@ export class VideoController {
   @Post()
   @UseGuards(JwtGuard, PermisosGuard)
   @RequierePermiso('contenido:gestionar')
-  @Throttle({ upload: { ttl: 60000, limit: 10 } })
+  @Throttle({ default: { ttl: 60000, limit: 10 } })
   @UseInterceptors(FileInterceptor('archivo', {
     storage: memoryStorage(),
     fileFilter: (_req, file, cb) => {
