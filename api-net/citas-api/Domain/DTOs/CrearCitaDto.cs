@@ -5,12 +5,21 @@ using System.ComponentModel.DataAnnotations;
 public class CrearCitaDto
 {
     [Required]
-    [Range(1, int.MaxValue, ErrorMessage = "ClienteId debe ser un ID válido")]
-    public int ClienteId { get; set; }
+    public string Nombre { get; set; } = string.Empty;
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = string.Empty;
+
+    [Required]
+    public string Telefono { get; set; } = string.Empty;
 
     [Required]
     public DateTime Fecha { get; set; }
 
+    [Required]
+    public TimeSpan Hora { get; set; }
+
     [MaxLength(500)]
-    public string? Descripcion { get; set; }
+    public string? Notas { get; set; }
 }

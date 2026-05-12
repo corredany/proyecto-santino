@@ -174,6 +174,33 @@ describe('ActualizarUsuarioUseCase', () => {
       await useCase.execute(1, { nombre: 'Nuevo Nombre' });
       expect(bcrypt.hash).not.toHaveBeenCalled();
     });
+
+    it('debe actualizar el email si el nuevo email está disponible', async () => {
+      mockU.findUnique
+        .mockResolvedValueOnce(USUARIO_DB)
+        .mockResolvedValueOnce(null);
+      mockU.update.mockResolvedValue(USUARIO_SELECT);
+
+      await useCase.execute(1, { email: 'nuevo@test.com' });
+
+      expect(mockU.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ email: 'nuevo@test.com' }),
+        }),
+      );
+    });
+
+    it('debe actualizar el rolId cuando se proporciona', async () => {
+      mockU.update.mockResolvedValue(USUARIO_SELECT);
+
+      await useCase.execute(1, { rolId: 2 });
+
+      expect(mockU.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ rolId: 2 }),
+        }),
+      );
+    });
   });
 });
 

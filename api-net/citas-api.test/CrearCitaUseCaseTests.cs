@@ -15,7 +15,7 @@ public class CrearCitaUseCaseTests
     private readonly CrearCitaUseCase _useCase;
 
     // Constantes
-    private readonly DateTime FechaValida = new DateTime(2026, 3, 30); // Lunes
+    private readonly DateTime FechaValida = new DateTime(2026, 6, 1); // Lunes
     private readonly TimeSpan HoraValida = TimeSpan.FromHours(9);
     private const string NombreValido = "Juan Pérez";
     private const string EmailValido = "juan@test.com";
@@ -72,7 +72,7 @@ public class CrearCitaUseCaseTests
     public async Task Execute_DebeLanzarExcepcion_CuandoEsFinDeSemana()
     {
         // Arrange
-        var dto = CrearDtoValido(fecha: new DateTime(2026, 3, 28)); // Sábado
+        var dto = CrearDtoValido(fecha: new DateTime(2026, 6, 6)); // Sábado
 
         // Act & Assert
         await Assert.ThrowsAsync<CitaInvalidaException>(() => _useCase.Execute(dto));

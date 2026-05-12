@@ -169,5 +169,17 @@ describe('LoginUseCase', () => {
         'hash_encriptado',
       );
     });
+
+    it('debe usar arreglo vacío si el usuario no tiene permisos definidos', async () => {
+      mockAuthRepository.encontrarUsuarioPorEmail.mockResolvedValue(
+        crearUsuarioMock({ permisos: undefined }),
+      );
+
+      await loginUseCase.execute(crearLoginDto(), IP_ADDRESS, USER_AGENT);
+
+      expect(mockTokenService.generarAccessToken).toHaveBeenCalledWith(
+        expect.objectContaining({ permisos: [] }),
+      );
+    });
   });
 });

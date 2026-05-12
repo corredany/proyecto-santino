@@ -31,7 +31,7 @@ public class CitasControllerTests : BaseIntegrationTest
         context.Citas.Add(new Cita
         {
             ClienteId = cliente.Id,
-            Fecha = new DateTime(2026, 3, 30),
+            Fecha = new DateTime(2026, 6, 1),
             Hora = TimeSpan.FromHours(9),
             Estado = "pendiente",
             CreadoEn = DateTime.UtcNow,
@@ -56,7 +56,7 @@ public class CitasControllerTests : BaseIntegrationTest
             Nombre = "Ana García",
             Email = "ana@test.com",
             Telefono = "6189876543",
-            Fecha = new DateTime(2026, 3, 31),
+            Fecha = new DateTime(2026, 6, 2),
             Hora = TimeSpan.FromHours(10),
             Notas = "Me interesa un closet",
         };
@@ -74,7 +74,7 @@ public class CitasControllerTests : BaseIntegrationTest
             Nombre = "Ana García",
             Email = "ana@test.com",
             Telefono = "6189876543",
-            Fecha = new DateTime(2026, 3, 28),
+            Fecha = new DateTime(2026, 6, 6),
             Hora = TimeSpan.FromHours(9),
         };
 
@@ -91,7 +91,7 @@ public class CitasControllerTests : BaseIntegrationTest
             Nombre = "Ana García",
             Email = "ana@test.com",
             Telefono = "6189876543",
-            Fecha = new DateTime(2026, 3, 30),
+            Fecha = new DateTime(2026, 6, 1),
             Hora = TimeSpan.FromHours(15),
         };
 

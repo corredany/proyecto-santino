@@ -46,6 +46,23 @@ describe('ImagenService', () => {
     jest.clearAllMocks();
   });
 
+  describe('obtenerTodos', () => {
+    it('debe retornar todas las imágenes', async () => {
+      mockImagenRepository.encontrarTodos.mockResolvedValue([imagenMock]);
+      const resultado = await imagenService.obtenerTodos();
+      expect(resultado).toEqual([imagenMock]);
+    });
+  });
+
+  describe('obtenerPorSeccion', () => {
+    it('debe retornar las imágenes de la sección indicada', async () => {
+      mockImagenRepository.encontrarPorSeccion.mockResolvedValue([imagenMock]);
+      const resultado = await imagenService.obtenerPorSeccion(1);
+      expect(resultado).toEqual([imagenMock]);
+      expect(mockImagenRepository.encontrarPorSeccion).toHaveBeenCalledWith(1);
+    });
+  });
+
   describe('obtenerPorId', () => {
     it('debe lanzar excepción si la imagen no existe', async () => {
       mockImagenRepository.encontrarPorId.mockResolvedValue(null);
@@ -79,6 +96,20 @@ describe('ImagenService', () => {
       await imagenService.subir(archivoMock, 42, 1, 0);
       expect(mockImagenRepository.crear).toHaveBeenCalledWith(
         expect.objectContaining({ creadoPor: 42, actualizadoPor: 42 }),
+      );
+    });
+
+    it('debe usar null como seccionId cuando no se proporciona', async () => {
+      await imagenService.subir(archivoMock, 1, undefined, 0);
+      expect(mockImagenRepository.crear).toHaveBeenCalledWith(
+        expect.objectContaining({ seccionId: null }),
+      );
+    });
+
+    it('debe usar el orden cuando se proporciona uno positivo', async () => {
+      await imagenService.subir(archivoMock, 1, 1, 3);
+      expect(mockImagenRepository.crear).toHaveBeenCalledWith(
+        expect.objectContaining({ orden: 3 }),
       );
     });
 

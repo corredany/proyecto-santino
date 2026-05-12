@@ -202,6 +202,18 @@ describe('RefreshTokenUseCase', () => {
         }),
       );
     });
+
+    it('debe usar arreglo vacío si el usuario no tiene permisos definidos', async () => {
+      mockAuthRepository.encontrarUsuarioPorId.mockResolvedValue(
+        crearUsuarioMock({ permisos: undefined }),
+      );
+
+      await refreshTokenUseCase.execute(REFRESH_TOKEN_FAKE);
+
+      expect(mockTokenService.generarAccessToken).toHaveBeenCalledWith(
+        expect.objectContaining({ permisos: [] }),
+      );
+    });
   });
 
   describe('cuando el token ha expirado', () => {

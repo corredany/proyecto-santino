@@ -122,4 +122,50 @@ describe('Auth Integration', () => {
       expect(refreshResponse.status).toBe(401);
     });
   });
+
+  describe('Guard JWT — /usuarios', () => {
+    let accessToken: string;
+
+    beforeAll(async () => {
+      const loginResponse = await supertest(app.getHttpServer())
+        .post('/auth/login')
+        .send({ email: 'admin@test.com', contrasena: 'password' });
+      accessToken = loginResponse.body.accessToken;
+    });
+
+    it('debe rechazar con 401 cuando no hay token', async () => {
+      const response = await supertest(app.getHttpServer()).get('/usuarios');
+      expect(response.status).toBe(401);
+    });
+
+    it('debe rechazar con 401 cuando el token es inválido', async () => {
+      const response = await supertest(app.getHttpServer())
+        .get('/usuarios')
+        .set('Authorization', 'Bearer token_completamente_invalido');
+      expect(response.status).toBe(401);
+    });
+
+    it('debe permitir el acceso con token válido', async () => {
+      const response = await supertest(app.getHttpServer())
+        .get('/usuarios')
+        .set('Authorization', `Bearer ${accessToken}`);
+      expect(response.status).toBe(200);
+      expect(Array.isArray(response.body)).toBe(true);
+    });
+
+    it('debe retornar 404 cuando el usuario no existe', async () => {
+      const response = await supertest(app.getHttpServer())
+        .delete('/usuarios/99999')
+        .set('Authorization', `Bearer ${accessToken}`);
+      expect(response.status).toBe(404);
+    });
+
+    it('debe retornar 400 cuando los datos de creación son inválidos', async () => {
+      const response = await supertest(app.getHttpServer())
+        .post('/usuarios')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({ nombre: 'Test' });
+      expect(response.status).toBe(400);
+    });
+  });
 });

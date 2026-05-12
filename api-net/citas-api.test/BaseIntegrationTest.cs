@@ -12,6 +12,8 @@ public class BaseIntegrationTest : IClassFixture<WebApplicationFactory<Program>>
 
     public BaseIntegrationTest(WebApplicationFactory<Program> factory)
     {
+        Environment.SetEnvironmentVariable("Jwt__Secret", "tu_clave_secreta_muy_larga_y_segura");
+
         var dbName = Guid.NewGuid().ToString();
 
         _factory = factory.WithWebHostBuilder(builder =>

@@ -46,6 +46,23 @@ describe('VideoService', () => {
     jest.clearAllMocks();
   });
 
+  describe('obtenerTodos', () => {
+    it('debe retornar todos los videos', async () => {
+      mockVideoRepository.encontrarTodos.mockResolvedValue([videoMock]);
+      const resultado = await videoService.obtenerTodos();
+      expect(resultado).toEqual([videoMock]);
+    });
+  });
+
+  describe('obtenerPorSeccion', () => {
+    it('debe retornar los videos de la sección indicada', async () => {
+      mockVideoRepository.encontrarPorSeccion.mockResolvedValue([videoMock]);
+      const resultado = await videoService.obtenerPorSeccion(1);
+      expect(resultado).toEqual([videoMock]);
+      expect(mockVideoRepository.encontrarPorSeccion).toHaveBeenCalledWith(1);
+    });
+  });
+
   describe('obtenerPorId', () => {
     it('debe lanzar excepción si el video no existe', async () => {
       mockVideoRepository.encontrarPorId.mockResolvedValue(null);
@@ -79,6 +96,20 @@ describe('VideoService', () => {
       await videoService.subir(archivoMock, 42, 1, 0);
       expect(mockVideoRepository.crear).toHaveBeenCalledWith(
         expect.objectContaining({ creadoPor: 42, actualizadoPor: 42 }),
+      );
+    });
+
+    it('debe usar null como seccionId cuando no se proporciona', async () => {
+      await videoService.subir(archivoMock, 1, undefined, 0);
+      expect(mockVideoRepository.crear).toHaveBeenCalledWith(
+        expect.objectContaining({ seccionId: null }),
+      );
+    });
+
+    it('debe usar el orden cuando se proporciona uno positivo', async () => {
+      await videoService.subir(archivoMock, 1, 1, 3);
+      expect(mockVideoRepository.crear).toHaveBeenCalledWith(
+        expect.objectContaining({ orden: 3 }),
       );
     });
 
