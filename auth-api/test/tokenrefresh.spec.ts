@@ -11,6 +11,7 @@ import {
 
 const ACCESS_TOKEN_FAKE = 'access_token_fake';
 const REFRESH_TOKEN_FAKE = 'refresh_token_fake';
+const NEW_REFRESH_TOKEN_FAKE = 'new_refresh_token_fake';
 const EMAIL_VALIDO = 'admin@test.com';
 
 const crearUsuarioMock = (overrides: Partial<Usuario> = {}): Usuario => {
@@ -147,6 +148,8 @@ describe('RefreshTokenUseCase', () => {
       mockAuthRepository.encontrarTokenRefresco.mockResolvedValue(crearTokenRefrescoVigente());
       mockAuthRepository.encontrarUsuarioPorId.mockResolvedValue(crearUsuarioMock());
       mockTokenService.generarAccessToken.mockReturnValue(ACCESS_TOKEN_FAKE);
+      mockTokenService.generarRefreshToken.mockReturnValue(NEW_REFRESH_TOKEN_FAKE);
+      mockAuthRepository.guardarTokenRefresco.mockResolvedValue(new TokenRefresh({}));
     });
 
     it('debe retornar nuevo accessToken', async () => {
@@ -169,6 +172,61 @@ describe('RefreshTokenUseCase', () => {
         rolNombre: 'admin',
         permisos: ['contenido:gestionar', 'usuarios:gestionar'],
       });
+    });
+
+    it('debe revocar el token anterior antes de generar uno nuevo', async () => {
+      await refreshTokenUseCase.execute(REFRESH_TOKEN_FAKE);
+
+      expect(mockAuthRepository.revocarTokenRefresco).toHaveBeenCalledWith(REFRESH_TOKEN_FAKE);
+    });
+
+    it('debe retornar el nuevo refreshToken', async () => {
+      const resultado = await refreshTokenUseCase.execute(REFRESH_TOKEN_FAKE);
+
+      expect(resultado).toEqual(
+        expect.objectContaining({
+          refreshToken: NEW_REFRESH_TOKEN_FAKE,
+        }),
+      );
+    });
+
+    it('debe guardar el nuevo refresh token en BD', async () => {
+      await refreshTokenUseCase.execute(REFRESH_TOKEN_FAKE);
+
+      expect(mockAuthRepository.guardarTokenRefresco).toHaveBeenCalledWith(
+        expect.objectContaining({
+          token: NEW_REFRESH_TOKEN_FAKE,
+          usuarioId: 1,
+          revocado: false,
+          revocadoEn: null,
+        }),
+      );
+    });
+  });
+
+  describe('cuando el token ha expirado', () => {
+    beforeEach(() => {
+      const expiraEn = new Date();
+      expiraEn.setDate(expiraEn.getDate() - 1);
+      mockTokenService.verificarRefreshToken.mockReturnValue({ id: 1 });
+      mockAuthRepository.encontrarTokenRefresco.mockResolvedValue(
+        crearTokenRefrescoVigente({ expiraEn }),
+      );
+    });
+
+    it('debe lanzar TokenRevocadoException', async () => {
+      await expect(
+        refreshTokenUseCase.execute(REFRESH_TOKEN_FAKE),
+      ).rejects.toThrow(TokenRevocadoException);
+    });
+
+    it('debe NO revocar ni generar nuevos tokens', async () => {
+      await expect(
+        refreshTokenUseCase.execute(REFRESH_TOKEN_FAKE),
+      ).rejects.toThrow();
+
+      expect(mockAuthRepository.revocarTokenRefresco).not.toHaveBeenCalled();
+      expect(mockTokenService.generarAccessToken).not.toHaveBeenCalled();
     });
   });
 });
