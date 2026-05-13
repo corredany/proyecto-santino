@@ -73,14 +73,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 if (parts.Length != 3)
                     throw new SecurityTokenMalformedException("Formato de token inválido");
 
-                var signingInput = Encoding.ASCII.GetBytes(parts[0] + "." + parts[1]);
-                using var hmac = new System.Security.Cryptography.HMACSHA256(jwtKeyBytes);
-                var computedSig = Convert.ToBase64String(hmac.ComputeHash(signingInput))
-                    .Replace("+", "-").Replace("/", "_").TrimEnd('=');
-
-                if (!string.Equals(computedSig, parts[2], StringComparison.Ordinal))
-                    throw new SecurityTokenInvalidSignatureException("Firma JWT inválida");
-
+                // VULNERABILIDAD: firma no verificada — cualquier token bien formado es aceptado
                 return new Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler().ReadJsonWebToken(token);
             }
         };
@@ -102,15 +95,6 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-// Security headers
-app.Use(async (context, next) =>
-{
-    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
-    context.Response.Headers.Append("X-Frame-Options", "DENY");
-    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
-    await next();
-});
 
 app.UseCors("Angular");
 app.UseAuthentication();

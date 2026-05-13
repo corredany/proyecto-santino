@@ -15,7 +15,6 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(200)
-  @Throttle({ login: { ttl: 60000, limit: 5 } })
   login(
     @Body() dto: LoginDto,
     @Ip() ip: string,

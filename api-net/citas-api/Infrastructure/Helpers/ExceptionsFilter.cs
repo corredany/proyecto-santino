@@ -24,7 +24,13 @@ public class ExceptionFilter : IExceptionFilter
             return;
         }
 
-        context.Result = new ObjectResult(new { error = "Error interno del servidor" })
+        context.Result = new ObjectResult(new
+        {
+            error = context.Exception.Message,
+            type = context.Exception.GetType().FullName,
+            stackTrace = context.Exception.StackTrace,
+            source = context.Exception.Source,
+        })
         {
             StatusCode = 500
         };

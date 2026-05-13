@@ -32,7 +32,6 @@ public class ClientesController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
     public async Task<IActionResult> ObtenerTodos()
     {
         var clientes = await _obtenerClientesUseCase.Execute();
@@ -40,7 +39,6 @@ public class ClientesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize]
     public async Task<IActionResult> ObtenerPorId(int id)
     {
         var cliente = await _obtenerClientePorIdUseCase.Execute(id);

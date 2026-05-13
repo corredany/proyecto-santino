@@ -38,7 +38,6 @@ public class CitasController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
     public async Task<IActionResult> ObtenerTodas()
     {
         var citas = await _obtenerCitasUseCase.Execute();
@@ -46,7 +45,6 @@ public class CitasController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize]
     public async Task<IActionResult> ObtenerPorId(int id)
     {
         var cita = await _obtenerCitaPorIdUseCase.Execute(id);
@@ -54,7 +52,6 @@ public class CitasController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize]
     public async Task<IActionResult> Actualizar(int id, [FromBody] ActualizarCitaDto dto)
     {
         var rolId = User.Claims.FirstOrDefault(c => c.Type == "rolId")?.Value;
@@ -64,7 +61,6 @@ public class CitasController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize]
     public async Task<IActionResult> Eliminar(int id)
     {
         await _eliminarCitaUseCase.Execute(id);
