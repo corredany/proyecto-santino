@@ -104,7 +104,7 @@ describe('SeccionService', () => {
       mockSeccionRepository.actualizar.mockResolvedValue(
         new Seccion({ ...seccion, visible: false }),
       );
-      const resultado = await seccionService.toggleVisible(1);
+      const resultado = await seccionService.toggleVisible(1, 1);
       expect(resultado.visible).toBe(false);
     });
   });
@@ -114,7 +114,7 @@ describe('SeccionService', () => {
       const dto = { nombre: 'Cocinas', orden: 1 };
       const seccionCreada = new Seccion({ id: 1, ...dto, esFija: false, visible: true });
       mockSeccionRepository.crear.mockResolvedValue(seccionCreada);
-      const resultado = await seccionService.crear(dto);
+      const resultado = await seccionService.crear(dto, 1);
       expect(resultado.esFija).toBe(false);
       expect(resultado.visible).toBe(true);
     });

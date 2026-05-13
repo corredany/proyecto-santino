@@ -115,6 +115,7 @@ app.Use(async (context, next) =>
 app.UseCors("Angular");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<CitasApi.Infrastructure.Middleware.LoggingMiddleware>();
 
 app.MapControllers();
 

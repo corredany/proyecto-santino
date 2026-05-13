@@ -5,6 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { join } from 'path';
 import { AppModule } from './app.module';
 import { DomainExceptionFilter } from './presentation/filters/domain-exception.filter';
+import { LoggingInterceptor } from './infrastructure/interceptors/logging.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -24,6 +25,7 @@ async function bootstrap() {
     credentials: true,
   });
 
+  app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalFilters(new DomainExceptionFilter());
 
   app.useGlobalPipes(
