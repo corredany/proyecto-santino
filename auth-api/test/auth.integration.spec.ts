@@ -1,20 +1,56 @@
+import 'dotenv/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import supertest from 'supertest';
+import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
+import { ThrottlerGuard } from '@nestjs/throttler';
 import { AppModule } from '../src/app.module';
 import { HttpExceptionFilter } from '../src/infrastructure/helpers/exceptions';
+import { jwtConfig } from '../src/infrastructure/config/jwt.config';
 import { prisma } from '../src/infrastructure/database/prisma';
 
 describe('Auth Integration', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
+    const rol = await prisma.rol.upsert({
+      where: { nombre: 'admin' },
+      update: {},
+      create: { nombre: 'admin' },
+    });
+
+    const permiso = await prisma.permiso.upsert({
+      where: { nombre: 'contenido:gestionar' },
+      update: {},
+      create: { nombre: 'contenido:gestionar' },
+    });
+
+    await prisma.rolPermiso.upsert({
+      where: { rolId_permisoId: { rolId: rol.id, permisoId: permiso.id } },
+      update: {},
+      create: { rolId: rol.id, permisoId: permiso.id },
+    });
+
+    const contrasena = await bcrypt.hash('password', 10);
+    await prisma.usuario.upsert({
+      where: { email: 'admin@test.com' },
+      update: { contrasena, rolId: rol.id },
+      create: { nombre: 'Admin Test', email: 'admin@test.com', contrasena, rolId: rol.id },
+    });
+
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(ThrottlerGuard)
+      .useValue({ canActivate: () => true })
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalFilters(new HttpExceptionFilter());
+    app.useGlobalPipes(
+      new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }),
+    );
     await app.init();
   });
 
@@ -23,6 +59,7 @@ describe('Auth Integration', () => {
   });
 
   afterAll(async () => {
+    await prisma.usuario.deleteMany({ where: { email: 'admin@test.com' } });
     await app.close();
   });
 
@@ -126,11 +163,18 @@ describe('Auth Integration', () => {
   describe('Guard JWT — /usuarios', () => {
     let accessToken: string;
 
-    beforeAll(async () => {
-      const loginResponse = await supertest(app.getHttpServer())
-        .post('/auth/login')
-        .send({ email: 'admin@test.com', contrasena: 'password' });
-      accessToken = loginResponse.body.accessToken;
+    beforeAll(() => {
+      accessToken = jwt.sign(
+        {
+          id: 1,
+          email: 'admin@test.com',
+          rolId: 1,
+          rolNombre: 'admin',
+          permisos: ['usuarios:gestionar'],
+        },
+        jwtConfig.secret,
+        { expiresIn: '15m' },
+      );
     });
 
     it('debe rechazar con 401 cuando no hay token', async () => {

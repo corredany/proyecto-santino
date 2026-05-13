@@ -1,18 +1,27 @@
+import 'dotenv/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import supertest from 'supertest';
 import * as jwt from 'jsonwebtoken';
+import { ThrottlerGuard } from '@nestjs/throttler';
 import { AppModule } from '../../src/app.module';
 import { DomainExceptionFilter } from '../../src/presentation/filters/domain-exception.filter';
+import { jwtConfig } from '../../src/infrastructure/config/jwt.config';
+import { prisma } from '../../src/infrastructure/database/prisma';
 
 describe('Contenido Integration', () => {
   let app: INestApplication;
   let tokenAdmin: string;
 
   beforeAll(async () => {
+    await prisma.seccion.deleteMany({ where: { nombre: 'Seccion Test Integracion' } });
+
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(ThrottlerGuard)
+      .useValue({ canActivate: () => true })
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalFilters(new DomainExceptionFilter());
@@ -29,12 +38,13 @@ describe('Contenido Integration', () => {
         rolNombre: 'admin',
         permisos: ['contenido:gestionar'],
       },
-      process.env.JWT_SECRET ?? 'test_secret',
+      jwtConfig.secret,
       { expiresIn: '15m' },
     );
   });
 
   afterAll(async () => {
+    await prisma.seccion.deleteMany({ where: { nombre: 'Seccion Test Integracion' } });
     await app.close();
   });
 
