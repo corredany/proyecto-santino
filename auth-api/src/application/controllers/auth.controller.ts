@@ -15,6 +15,7 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(200)
+  @SkipThrottle()
   login(
     @Body() dto: LoginDto,
     @Ip() ip: string,
