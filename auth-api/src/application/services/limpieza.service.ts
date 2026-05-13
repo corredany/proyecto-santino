@@ -22,7 +22,12 @@ export class LimpiezaService {
 
       this.logger.log(`Limpieza completada. Tokens eliminados: ${resultado.count}`);
     } catch (error) {
-      this.logger.error(`Limpieza interrumpida por fallo en BD: ${(error as Error).message}`);
+      const msg = (error as Error).message;
+      if (msg.includes('P1001') || msg.includes('P1002') || msg.includes('connect')) {
+        this.logger.warn('Limpieza omitida — base de datos no disponible (réplica posiblemente caída). Se reintentará en el siguiente ciclo.');
+      } else {
+        this.logger.error(`Limpieza interrumpida por fallo en BD: ${msg}`);
+      }
     }
   }
 }

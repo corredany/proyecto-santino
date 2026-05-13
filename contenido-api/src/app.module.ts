@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { ScheduleModule } from '@nestjs/schedule';
+import { LimpiezaContenidoService } from './application/services/limpieza-contenido.service';
 import { InfrastructureModule } from './infrastructure/infrastructure.module';
 import { SeccionModule } from './presentation/modules/seccion.module';
 import { ImagenModule } from './presentation/modules/imagen.module';
@@ -33,6 +34,7 @@ import { AuditoriaModule } from './presentation/modules/auditoria.module';
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
+    LimpiezaContenidoService,
   ],
 })
 export class AppModule {}
