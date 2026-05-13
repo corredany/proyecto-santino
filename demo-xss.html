@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Demo XSS</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: 60px auto; padding: 0 20px; }
+    h2 { color: #c0392b; }
+    .cita { border: 1px solid #ddd; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #f9f9f9; }
+    .cita strong { display: block; margin-bottom: 6px; color: #333; }
+    .notas { margin-top: 8px; padding: 10px; background: white; border: 1px solid #eee; border-radius: 4px; }
+    button { padding: 10px 20px; background: #c0392b; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-bottom: 20px; }
+    #estado { color: #888; font-style: italic; margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+  <h2>⚠️ Demo XSS — Citas (puerto 8080)</h2>
+  <p>Esta página obtiene las citas de la API vulnerable y renderiza el campo <strong>notas</strong> directamente como HTML sin sanitizar.</p>
+
+  <button onclick="cargarCitas()">Cargar citas</button>
+  <div id="estado"></div>
+  <div id="lista"></div>
+
+  <script>
+    async function cargarCitas() {
+      const estado = document.getElementById('estado');
+      const lista = document.getElementById('lista');
+      lista.innerHTML = '';
+      estado.textContent = 'Cargando...';
+
+      try {
+        const res = await fetch('http://localhost:80/api/citas/api/citas');
+        const citas = await res.json();
+
+        if (!citas.length) {
+          estado.textContent = 'No hay citas registradas. Crea una desde Postman con notas maliciosas.';
+          return;
+        }
+
+        estado.textContent = `${citas.length} cita(s) encontrada(s):`;
+
+        citas.forEach(cita => {
+          const div = document.createElement('div');
+          div.className = 'cita';
+          div.innerHTML = `
+            <strong>Cita #${cita.id} — ${cita.fecha}</strong>
+            Estado: ${cita.estado}<br/>
+            <div class="notas"><b>Notas:</b> ${cita.notas ?? '(sin notas)'}</div>
+          `;
+          lista.appendChild(div);
+        });
+
+      } catch (e) {
+        estado.textContent = 'Error al conectar con la API: ' + e.message;
+      }
+    }
+  </script>
+</body>
+</html>

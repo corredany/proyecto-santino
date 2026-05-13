@@ -57,39 +57,30 @@ export class ContactoComponent {
     this.enviando = true;
     this.errorEnvio = null;
 
-    const descripcion = [
+    const fecha = this.form.fecha ?? new Date();
+    const fechaStr = fecha.toISOString().split('T')[0];
+    const horaStr = `${String(fecha.getHours()).padStart(2, '0')}:${String(fecha.getMinutes()).padStart(2, '0')}:00`;
+
+    const notas = [
       `Tipo de proyecto: ${this.form.tipoProyecto === 'otro' ? this.form.otroProyecto : this.form.tipoProyecto}`,
       `Domicilio: ${this.form.calle} ${this.form.numero}, ${this.form.colonia}, CP ${this.form.codigoPostal}`,
-      `Teléfono: ${this.form.telefono}`,
-      `Email: ${this.form.email}`,
       this.form.comentarios ? `Comentarios: ${this.form.comentarios}` : '',
     ].filter(Boolean).join(' | ');
 
-    // Paso 1: crear el cliente en api-net
-    this.http.post<{ id: number }>(`${environment.citasApi}/api/clientes`, {
+    this.http.post(`${environment.citasApi}/api/citas`, {
       nombre: this.form.nombre,
       email: this.form.email,
       telefono: this.form.telefono,
+      fecha: fechaStr,
+      hora: horaStr,
+      notas,
     }).subscribe({
-      next: (cliente) => {
-        // Paso 2: crear la cita con el clienteId obtenido
-        this.http.post(`${environment.citasApi}/api/citas`, {
-          clienteId: cliente.id,
-          fecha: this.form.fecha?.toISOString() ?? new Date().toISOString(),
-          descripcion,
-        }).subscribe({
-          next: () => {
-            this.exito = true;
-            this.enviando = false;
-          },
-          error: (err: HttpErrorResponse) => {
-            this.errorEnvio = err.error?.error ?? 'Error al agendar la cita. Por favor intente más tarde.';
-            this.enviando = false;
-          },
-        });
+      next: () => {
+        this.exito = true;
+        this.enviando = false;
       },
       error: (err: HttpErrorResponse) => {
-        this.errorEnvio = err.error?.error ?? 'Error al registrar sus datos. Por favor intente más tarde.';
+        this.errorEnvio = err.error?.error ?? 'Error al agendar la cita. Por favor intente más tarde.';
         this.enviando = false;
       },
     });
