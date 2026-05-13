@@ -30,6 +30,12 @@ public class CitasController : ControllerBase
         _eliminarCitaUseCase = eliminarCitaUseCase;
     }
 
+    [HttpGet("error-test")]
+    public IActionResult ErrorTest()
+    {
+        throw new InvalidOperationException("Error interno: fallo al conectar con el servicio de notificaciones en 192.168.1.45:5432");
+    }
+
     [HttpPost]
     public async Task<IActionResult> Crear([FromBody] CrearCitaDto dto)
     {
