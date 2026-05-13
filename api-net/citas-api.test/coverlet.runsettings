@@ -4,10 +4,8 @@
     <DataCollectors>
       <DataCollector friendlyName="XPlat Code Coverage">
         <Configuration>
-          <Include>
-            [citas-api]CitasApi.Application.Logic.*,
-            [citas-api]CitasApi.Domain.Entities.*
-          </Include>
+          <Include>[citas-api]CitasApi.Application.Logic.*,[citas-api]CitasApi.Domain.Entities.*</Include>
+          <Exclude>[citas-api]citas_api.Migrations.*</Exclude>
           <ExcludeByAttribute>GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
         </Configuration>
       </DataCollector>

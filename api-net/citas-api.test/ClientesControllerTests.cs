@@ -85,5 +85,33 @@ public class ClientesControllerTests : BaseIntegrationTest
         _client.DefaultRequestHeaders.Authorization = null;
     }
 
-    
+    [Fact]
+    public async Task POST_Clientes_DebeCrearClienteNuevo()
+    {
+        var dto = new { nombre = "Nuevo Cliente", email = "nuevo@test.com", telefono = "6189876543" };
+        var content = new System.Net.Http.StringContent(
+            System.Text.Json.JsonSerializer.Serialize(dto),
+            System.Text.Encoding.UTF8,
+            "application/json");
+
+        var response = await _client.PostAsync("/api/clientes", content);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task POST_Clientes_DebeRetornarClienteExistente_CuandoEmailYaRegistrado()
+    {
+        await SeedData();
+
+        var dto = new { nombre = "Juan Pérez", email = "juan@test.com", telefono = "6181234567" };
+        var content = new System.Net.Http.StringContent(
+            System.Text.Json.JsonSerializer.Serialize(dto),
+            System.Text.Encoding.UTF8,
+            "application/json");
+
+        var response = await _client.PostAsync("/api/clientes", content);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
 }
