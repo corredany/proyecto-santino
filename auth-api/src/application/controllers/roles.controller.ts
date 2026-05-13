@@ -1,9 +1,7 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
+import { Controller, Get } from '@nestjs/common';
 import { prisma } from '../../infrastructure/database/prisma';
 
 @Controller('roles')
-@UseGuards(JwtGuard)
 export class RolesController {
   @Get()
   obtenerTodos() {

@@ -61,6 +61,7 @@ public class CitasController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> Eliminar(int id)
     {
         await _eliminarCitaUseCase.Execute(id);

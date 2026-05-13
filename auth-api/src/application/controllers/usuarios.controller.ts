@@ -1,15 +1,10 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, UseGuards } from '@nestjs/common';
-import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
-import { PermisosGuard } from '../../infrastructure/guards/permisos.guard';
-import { RequierePermiso } from '../../infrastructure/decorators/requiere-permiso.decorator';
+import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode } from '@nestjs/common';
 import { ObtenerUsuariosUseCase } from '../logic/usuarios/obtener-usuarios.usecase';
 import { CrearUsuarioUseCase, CrearUsuarioDto } from '../logic/usuarios/crear-usuario.usecase';
 import { ActualizarUsuarioUseCase, ActualizarUsuarioDto } from '../logic/usuarios/actualizar-usuario.usecase';
 import { EliminarUsuarioUseCase } from '../logic/usuarios/eliminar-usuario.usecase';
 
 @Controller('usuarios')
-@UseGuards(JwtGuard, PermisosGuard)
-@RequierePermiso('usuarios:gestionar')
 export class UsuariosController {
   constructor(
     private readonly obtener: ObtenerUsuariosUseCase,
