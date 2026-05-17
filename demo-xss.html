@@ -29,7 +29,7 @@
       estado.textContent = 'Cargando...';
 
       try {
-        const res = await fetch('http://localhost:80/api/citas/api/citas');
+        const res = await fetch('http://localhost:8080/api/citas/api/citas');
         const citas = await res.json();
 
         if (!citas.length) {
