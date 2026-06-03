@@ -48,6 +48,14 @@ public class CitasControllerTests : BaseIntegrationTest
         return Task.FromResult(cita.Id);
     }
 
+    private static DateTime GetProximoDiaHabil()
+    {
+        var fecha = DateTime.Today.AddDays(1);
+        while (fecha.DayOfWeek == DayOfWeek.Saturday || fecha.DayOfWeek == DayOfWeek.Sunday)
+            fecha = fecha.AddDays(1);
+        return fecha;
+    }
+
     [Fact]
     public async Task POST_Citas_DebeRetornar201_CuandoDatosValidos()
     {
@@ -56,7 +64,7 @@ public class CitasControllerTests : BaseIntegrationTest
             Nombre = "Ana García",
             Email = "ana@test.com",
             Telefono = "6189876543",
-            Fecha = new DateTime(2026, 6, 2),
+            Fecha = GetProximoDiaHabil(),
             Hora = TimeSpan.FromHours(10),
             Notas = "Me interesa un closet",
         };
