@@ -15,7 +15,14 @@ public class CrearCitaUseCaseTests
     private readonly CrearCitaUseCase _useCase;
 
     // Constantes
-    private readonly DateTime FechaValida = new DateTime(2026, 6, 1); // Lunes
+    private static DateTime GetProximoDiaHabil()
+    {
+        var fecha = DateTime.Today.AddDays(1);
+        while (fecha.DayOfWeek == DayOfWeek.Saturday || fecha.DayOfWeek == DayOfWeek.Sunday)
+            fecha = fecha.AddDays(1);
+        return fecha;
+    }
+    private readonly DateTime FechaValida = GetProximoDiaHabil();
     private readonly TimeSpan HoraValida = TimeSpan.FromHours(9);
     private const string NombreValido = "Juan Pérez";
     private const string EmailValido = "juan@test.com";
