@@ -1,0 +1,74 @@
+name: Santino_Services
+
+on:
+  push:
+    branches:
+      - features/variables-en-yml
+  pull_request:
+    branches:
+      - main
+
+env:
+  App_Name: 'Santino_Services'
+  Dotnet_Version: '9'
+  Node_Version: '22'
+  PostgreSQL_Version: '17'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TipoEjecucion: 'Validacion de variables'
+
+    steps:
+      - name: Mostrar Variables Globales y de Job
+        env:
+          mensaje: Hola, soy una variable de paso
+        run: |
+          echo "Aplicacion: $App_Name"
+          echo "Version de .NET: $Dotnet_Version"
+          echo "Version de Node: $Node_Version"
+          echo "Version de PostgreSQL: $PostgreSQL_Version"
+          echo "Tipo de ejecucion: $TipoEjecucion"
+          echo "Mensaje de paso: $mensaje"
+          echo "Descripcion del proyecto: ${{ vars.PROYECT_DESCRIPTION }}"
+
+      - name: Crear Variable Dinamica
+        run: echo "framework=NET.$Dotnet_Version" >> $GITHUB_ENV
+
+      - name: Usar Variable Dinamica
+        run: echo "Framework activo: $framework"
+
+      - name: Revision de codigo
+        uses: actions/checkout@v4
+
+      - name: Setup .NET ${{ env.Dotnet_Version }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '${{ env.Dotnet_Version }}.0.x'
+
+      - name: Restaurar dependencias citas-api
+        run: dotnet restore ./api-net/citas-api/citas-api.sln
+
+      - name: Compilar citas-api
+        run: dotnet build ./api-net/citas-api/citas-api.sln --configuration Release --no-restore
+
+      - name: Ejecutar pruebas citas-api
+        run: dotnet test ./api-net/citas-api.test/citas-api.test.csproj --configuration Release
+
+      - name: Setup Node.js ${{ env.Node_Version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.Node_Version }}
+
+      - name: Instalar dependencias auth-api
+        run: npm ci --prefix ./auth-api
+
+      - name: Compilar auth-api
+        run: npm run build --prefix ./auth-api
+
+      - name: Instalar dependencias contenido-api
+        run: npm ci --prefix ./contenido-api
+
+      - name: Compilar contenido-api
+        run: npm run build --prefix ./contenido-api
