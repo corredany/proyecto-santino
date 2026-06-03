@@ -4,13 +4,9 @@ on:
   push:
     branches:
       - features/docker-workflows
-    paths:
-      - 'santino-web/**'
   pull_request:
     branches:
       - main
-    paths:
-      - 'santino-web/**'
 
 jobs:
   build-and-push:
