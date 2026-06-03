@@ -1,0 +1,37 @@
+name: Santino_Services_CI
+
+on:
+  push:
+    branches:
+      - features/workflow-reusable
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  compilar:
+    uses: ./.github/workflows/actionsvariables.yml
+
+  configuracion:
+    runs-on: ubuntu-latest
+    needs: compilar
+
+    steps:
+      - name: Revision de codigo
+        uses: actions/checkout@v4
+
+      - name: Leer appsettings.json (antes del cambio)
+        run: |
+          echo "=== appsettings.json ANTES ==="
+          cat $GITHUB_WORKSPACE/api-net/citas-api/appsettings.json
+
+      - name: Modificar DefaultConnection
+        run: |
+          jq '.ConnectionStrings.DefaultConnection = "Server=db-server;Database=citas_db;User Id=sa;Password=Pa$$w0rd;TrustServerCertificate=True;"' \
+            $GITHUB_WORKSPACE/api-net/citas-api/appsettings.json > /tmp/appsettings.tmp
+          mv /tmp/appsettings.tmp $GITHUB_WORKSPACE/api-net/citas-api/appsettings.json
+
+      - name: Leer appsettings.json (despues del cambio)
+        run: |
+          echo "=== appsettings.json DESPUES ==="
+          cat $GITHUB_WORKSPACE/api-net/citas-api/appsettings.json

@@ -1,12 +1,7 @@
 name: Santino_Services
 
 on:
-  push:
-    branches:
-      - features/variables-en-yml
-  pull_request:
-    branches:
-      - main
+  workflow_call:
 
 env:
   App_Name: 'Santino_Services'
