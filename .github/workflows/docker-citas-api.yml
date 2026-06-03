@@ -1,0 +1,25 @@
+name: Docker - citas-api
+
+on:
+  push:
+    branches:
+      - features/docker-workflows
+    paths:
+      - 'api-net/citas-api/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'api-net/citas-api/**'
+
+jobs:
+  build-and-push:
+    uses: ./.github/workflows/docker-reusable.yml
+    with:
+      service-name: citas-api
+      dockerfile-path: ./api-net/citas-api/Dockerfile
+      context-path: ./api-net/citas-api
+      image-name: citas-api
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}

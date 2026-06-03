@@ -1,0 +1,25 @@
+name: Docker - santino-web
+
+on:
+  push:
+    branches:
+      - features/docker-workflows
+    paths:
+      - 'santino-web/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'santino-web/**'
+
+jobs:
+  build-and-push:
+    uses: ./.github/workflows/docker-reusable.yml
+    with:
+      service-name: santino-web
+      dockerfile-path: ./santino-web/Dockerfile
+      context-path: ./santino-web
+      image-name: santino-web
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
