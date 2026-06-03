@@ -37,7 +37,8 @@ jobs:
         run: echo "framework=NET.$Dotnet_Version" >> $GITHUB_ENV
 
       - name: Usar Variable Dinamica
-        run: echo "Framework activo: $framework"
+        run: |
+          echo "Framework activo: $framework"
 
       - name: Revision de codigo
         uses: actions/checkout@v4
