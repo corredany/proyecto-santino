@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Mostrar Variables Globales y de Job
         env:
-          mensaje: Hola, soy una variable de paso haciendo pruebas
+          mensaje: Hola, soy una variable de paso
         run: |
           echo "Aplicacion: $App_Name"
           echo "Version de .NET: $Dotnet_Version"
